@@ -89,19 +89,6 @@ int main()
 	uint8_t duck3 = 1;
 
     while(true) {
-    	uint32_t currTime = us_ticker_read();
-
-////    	if(currTime >= timeToRunChip) {
-////			timeToRunChip = currTime /*+ 2000 * duck3*/;
-//			display.drawPixel(duck++ / 3, 0, 1);
-////    		for(uint16_t i = 0; i < duck3; ++i) {
-//				// todo DUCK
-//	//			uint8_t key = getKey();
-//	//			chip.runOne(key);
-//				chip.runOne(2);
-////    		}
-////	    }
-
 		// todo DUCK
 //    	if(currTime >= timeToDecrementCounters) {
 //    		timeToRunChip = currTime + 16666;
@@ -121,7 +108,5 @@ int main()
 		} else {
 			display.drawPixel(duck++ / 3, 0, 1);
 		}
-
-//		wait(1);
     }
 }

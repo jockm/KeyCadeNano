@@ -38,25 +38,34 @@ Ticker intervalTicker;
 
 uint8_t lastKey;
 
-uint8_t getKey(void) {
-	uint8_t ret = CHIP8_NOKEY;
-	char    key = CHIP8_NOKEY;
+uint8_t getCurrentKey(void)
+{
+	char ret = CHIP8_NOKEY;
 
 	if (!up) {
-		key = currGame->keyMap[0];
+		ret = currGame->keyMap[0];
 	} else if (!down) {
-		key = currGame->keyMap[1];
+		ret = currGame->keyMap[1];
 	} else if (!left) {
-		key = currGame->keyMap[2];
+		ret = currGame->keyMap[2];
 	} else if (!right) {
-		key = currGame->keyMap[3];
+		ret = currGame->keyMap[3];
 	} else if (!center) {
-		key = currGame->keyMap[4];
+		ret = currGame->keyMap[4];
 	} else if (!action1) {
-		key = currGame->keyMap[5];
+		ret = currGame->keyMap[5];
 	} else if (!action2) {
-		key = currGame->keyMap[6];
+		ret = currGame->keyMap[6];
 	}
+
+	return ret;
+}
+
+
+uint8_t getKey(void)
+{
+	uint8_t ret = CHIP8_NOKEY;
+	char    key = getCurrentKey();
 
 	if(key != lastKey) {
 		ret = key;
@@ -68,10 +77,6 @@ uint8_t getKey(void) {
 }
 
 
-//void callback()
-//{
-//	chip.intervalCallback();
-//}
 
 int main()
 {

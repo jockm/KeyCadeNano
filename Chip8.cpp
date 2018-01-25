@@ -92,12 +92,21 @@ inline bool Chip8::drawPixel(uint8_t x, uint8_t y, bool on)
 		y *= 2;
 	}
 
+#if 1
+	bool ret = this->screen->xorRawPixel(x, y, on);
+	if(!this->enhancedMode) {
+		this->screen->xorRawPixel(x + 1, y, on);
+		this->screen->xorRawPixel(x, y + 1, on);
+		this->screen->xorRawPixel(x + 1, y + 1, on);
+	}
+#else
 	bool ret = this->screen->xorPixel(x, y, on);
 	if(!this->enhancedMode) {
 		this->screen->xorPixel(x + 1, y, on);
 		this->screen->xorPixel(x, y + 1, on);
 		this->screen->xorPixel(x + 1, y + 1, on);
 	}
+#endif
 	return ret;
 }
 
@@ -153,7 +162,7 @@ bool Chip8::runOne(uint8_t keyPressed)
 			break;
 
 		case 0x6:
-			ret = this->doLoadConst(x, kk);
+			this->v[x] = kk;
 			break;
 
 		case 0x7:
@@ -169,15 +178,15 @@ bool Chip8::runOne(uint8_t keyPressed)
 			break;
 
 		case 0xA:
-			ret = this->doLoadIndex(nnn);
+			this->vI = nnn;
 			break;
 
 		case 0xB:
-			ret = this->doJumpV0(nnn);
+			this->pc = (this->vI + this->v[0]) & 0x0FFF;
 			break;
 
 		case 0xC:
-			ret = this->doLoadRandom(x, kk);
+			this->v[x] = (rand() & 0xFF) & kk;
 			break;
 
 		case 0xD:
@@ -655,7 +664,6 @@ inline bool Chip8::doJumpV0(uint16_t nnn)
 // CXKK     VX := pseudorandom_number and KK
 inline bool Chip8::doLoadRandom(uint8_t x, uint8_t kk)
 {
-	this->v[x] = (rand() & 0xFF) & kk;
 
 	return true;
 }
@@ -665,9 +673,6 @@ inline bool Chip8::doLoadRandom(uint8_t x, uint8_t kk)
 // collision. If N=0 and extended mode, show 16x16 sprite.
 inline bool Chip8::doDraw(uint8_t x, uint8_t y, uint8_t height)
 {
-	// todo duck
-//	return true;
-
 	bool collision = false;
 	uint8_t byteWidth = 1;
 
@@ -676,25 +681,40 @@ inline bool Chip8::doDraw(uint8_t x, uint8_t y, uint8_t height)
 		height = 16;
 	}
 
-	x = this->v[x];
-	y = this->v[y];
+	// Because we know the screen is flipped we are going to do the math
+	// once and not on every drawPixel call
+	x = this->screenWidth - 1 - this->v[x];
+	y = this->screenHeight - 1 - this->v[y];
+
 
 	uint16_t addr = this->vI;
 
-	for(uint16_t yPos = y; yPos < y + height; ++yPos) {
+	for(uint16_t yPos = y + height - 1; yPos >= y; --yPos) {
 		uint16_t xPos = x;
 		for(uint16_t i = 0; i < byteWidth; ++i) {
-			uint8_t pixelByte = this->mem[addr];
+			uint8_t pixelByte = this->mem[addr++];
 
-			for(int8_t bit = 7; bit >= 0; --bit) {
-				uint8_t color = pixelByte & (1 << bit);
-				if(this->drawPixel(xPos, yPos, !!color)) {
-					collision = true;
-				}
+			uint8_t color0 = pixelByte & (1 << 7);
+			uint8_t color1 = pixelByte & (1 << 6);
+			uint8_t color2 = pixelByte & (1 << 5);
+			uint8_t color3 = pixelByte & (1 << 4);
+			uint8_t color4 = pixelByte & (1 << 3);
+			uint8_t color5 = pixelByte & (1 << 2);
+			uint8_t color6 = pixelByte & (1 << 1);
+			uint8_t color7 = pixelByte & (1 << 0);
 
-				++xPos;
-			}
-			++addr;
+			uint8_t collision0 = this->drawPixel(xPos--, yPos, color0);
+			uint8_t collision1 = this->drawPixel(xPos--, yPos, color1);
+			uint8_t collision2 = this->drawPixel(xPos--, yPos, color2);
+			uint8_t collision3 = this->drawPixel(xPos--, yPos, color3);
+			uint8_t collision4 = this->drawPixel(xPos--, yPos, color4);
+			uint8_t collision5 = this->drawPixel(xPos--, yPos, color5);
+			uint8_t collision6 = this->drawPixel(xPos--, yPos, color6);
+			uint8_t collision7 = this->drawPixel(xPos--, yPos, color7);
+
+			collision = collision0 | collision1 | collision2
+					| collision3 | collision4 | collision5
+					| collision6 | collision7;
 		}
 	}
 

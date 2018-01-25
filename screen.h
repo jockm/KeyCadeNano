@@ -18,9 +18,10 @@ class Screen {
 		virtual void drawBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h) = 0;
 		virtual void xorBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h) = 0;
 		virtual void drawChar(uint8_t x, uint8_t y, const char ch) = 0;
-		virtual void drawPixel(uint8_t x, uint8_t y, uint8_t color) = 0;
+		virtual void drawRawPixel(uint8_t x, uint8_t y, uint8_t color) = 0;
 		virtual void togglePixel(uint8_t x, uint8_t y) = 0;
 		virtual bool xorPixel(uint8_t x, uint8_t y, uint8_t color) = 0;
+		virtual bool xorRawPixel(uint8_t x, uint8_t y, uint8_t color) = 0;
 		virtual uint8_t getPixel(uint8_t x, uint8_t y) = 0;
 		virtual void fillScreen(uint8_t color) = 0;
 		virtual void clearScreen() = 0;

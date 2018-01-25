@@ -10,10 +10,15 @@
 
 #	include "mbed.h"
 
+	enum GameType {
+		GT_CHIP8 = 0,
+		GT_EOL = 0xFF
+	};
+
 	typedef struct {
-		uint8_t        type;
-		uint16_t       instructionHz;
-		uint16_t       screenUpdateHz;
+		uint8_t       type;
+		uint16_t       instructionsPerSecond;
+		uint16_t       framesPerSecond;
 		const char    *name;
 		const char    *keyMap;
 		const char    *instuctions;

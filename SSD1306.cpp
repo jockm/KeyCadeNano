@@ -2,6 +2,7 @@
 #include <Font.h>
 #include "SSD1306.h"
 
+
 #define SSD1306_SETCONTRAST 0x81
 #define SSD1306_DISPLAYALLON_RESUME 0xA4
 #define SSD1306_DISPLAYALLON 0xA5
@@ -148,6 +149,11 @@ void SSD1306::initDisplay()
 
 }
 
+void SSD1306::transferCallback(int foo)
+{
+
+}
+
 
 void SSD1306::update()
 {
@@ -168,15 +174,25 @@ void SSD1306::update()
 	}
 	this->sendCommand(pageAddr); // Page end address
 
-	char buff[17];
-	buff[0] = 0x40; // Data Mode
+	transferBuffer[0] = 0x40;
 
+#if defined(SSD1306_TRANSFRER_ASYNC)
+	event_callback_t callbackEvent;
+	callbackEvent.attach(this, &SSD1306::transferCallback);
+
+	memcpy(transferBuffer + 1, this->displayBuffer, sizeof(this->displayBuffer));
+	this->i2c->transfer(this->i2cAddr, (const char *) transferBuffer, sizeof(this->displayBuffer) + 1, (char *)transferResponseBuffer, sizeof(transferResponseBuffer), callbackEvent);
+#elif defined(SSD1306_TRANSFRER_SYNC_WHOLE)
+	memcpy(transferBuffer + 1, this->displayBuffer, sizeof(this->displayBuffer));
+	this->i2c->write(this->i2cAddr, (const char *) this->transferBuffer, sizeof(this->displayBuffer) + 1);
+#else
 	// send display buffer in 16 byte chunks
-	for(uint16_t i=0, q=bufferSize; i<q; i+=16 )
+	for(uint16_t i= 0; i < bufferSize; i += 16 )
 	{
-		memcpy(buff + 1, this->displayBuffer + i, sizeof(buff) - 1);
-		this->i2c->write(this->i2cAddr, (const char *) buff, sizeof(buff));
+		memcpy(this->transferBuffer + 1, this->displayBuffer + i, 17);
+		this->i2c->write(this->i2cAddr, (const char *) this->transferBuffer, 17);
 	}
+#endif
 
 }
 
@@ -272,17 +288,15 @@ void SSD1306::scrollDown(uint8_t n)
 
 void SSD1306::sendData(uint8_t d)
 {
-	char buff[2];
-	buff[0] = 0x40; // Data Mode
-	buff[1] = d;
-	this->i2c->write(this->i2cAddr, buff, 2);
+	this->transferBuffer[0] = 0x40; // Data Mode
+	this->transferBuffer[1] = d;
+	this->i2c->write(this->i2cAddr, (const char *)this->transferBuffer, 2);
 }
 
 
 void SSD1306::sendCommand(uint8_t c)
 {
-	char buff[2];
-	buff[0] = 0; // Command Mode
-	buff[1] = c;
-	this->i2c->write(this->i2cAddr, buff, 2);
+	this->transferBuffer[0] = 0; // Command Mode
+	this->transferBuffer[1] = c;
+	this->i2c->write(this->i2cAddr, (const char *)this->transferBuffer, 2);
 }

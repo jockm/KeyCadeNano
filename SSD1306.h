@@ -10,6 +10,10 @@
 #	define SSD1306_BLACK 0
 #	define SSD1306_WHITE 1
 
+#define SSD1306_TRANSFRER_ASYNC
+//#define SSD1306_TRANSFRER_SYNC_WHOLE
+//#define SSD1306_TRANSFRER_SYNC_CHUNK
+
 
 	class SSD1306 : public Screen {
 		public:
@@ -37,6 +41,20 @@
 			void scrollDown(uint8_t n);
 
 
+			inline void drawRawPixel(uint8_t x, uint8_t y, uint8_t color)
+			{
+				uint8_t pixelByte = this->displayBuffer[x+ (y / 8) * this->displayWidth];
+
+				if(color) {
+					pixelByte |= 1 << (y & 7);
+				} else {
+					pixelByte &= ~(1 << (y & 7));
+				}
+
+				this->displayBuffer[x+ (y / 8) * this->displayWidth] = pixelByte;
+			}
+
+
 			inline void drawPixel(uint8_t x, uint8_t y, uint8_t color)
 			{
 				if(y >= this->displayHeight || x >= this->displayWidth) {
@@ -46,15 +64,7 @@
 				x = this->screenFlipped ? this->displayWidth - 1 - x : x;
 				y = this->screenFlipped ? this->displayHeight - 1 - y : y;
 
-				uint8_t pixelByte = this->displayBuffer[x+ (y / 8) * this->displayWidth];
-
-				if(!!color) {
-					pixelByte |= 1 << (y & 7);
-				} else {
-					pixelByte &= ~(1 << (y & 7));
-				}
-
-				this->displayBuffer[x+ (y / 8) * this->displayWidth] = pixelByte;
+				this->drawRawPixel(x, y, color);
 			}
 
 
@@ -65,9 +75,22 @@
 			}
 
 
+			inline bool xorRawPixel(uint8_t x, uint8_t y, uint8_t color)
+			{
+				uint8_t pixel = this->getRawPixel(x, y);
+				color = color ? 1 : 0;
+
+				bool ret = pixel && color;
+
+				this->drawRawPixel(x, y, pixel ^ color);
+
+				return ret;
+			}
+
 			inline bool xorPixel(uint8_t x, uint8_t y, uint8_t color)
 			{
 				uint8_t pixel = this->getPixel(x, y);
+				color = color ? 1 : 0;
 
 				bool ret = pixel && color;
 
@@ -76,6 +99,15 @@
 				return ret;
 			}
 
+
+			inline uint8_t getRawPixel(uint8_t x, uint8_t y)
+			{
+				uint8_t pixelByte = this->displayBuffer[x+ (y / 8) * this->displayWidth];
+
+				uint8_t ret = pixelByte & (1 << (y & 7));
+
+				return !!ret;
+			}
 
 			inline uint8_t getPixel(uint8_t x, uint8_t y)
 			{
@@ -86,11 +118,9 @@
 				x = this->screenFlipped ? this->displayWidth - 1 - x : x;
 				y = this->screenFlipped ? this->displayHeight - 1 - y : y;
 
-				uint8_t pixelByte = this->displayBuffer[x+ (y / 8) * this->displayWidth];
+				uint8_t ret = this->getRawPixel(x, y);
 
-				uint8_t ret = pixelByte & (1 << (y & 7));
-
-				return !!ret;
+				return ret;
 			}
 
 
@@ -144,9 +174,7 @@
 			void sendCommand(uint8_t c);
 			void sendData(uint8_t c);
 
-//			inline void fixXY(uint8_t &x, uint8_t &y)
-//			{
-//			}
+			void transferCallback(int foo);
 
 
 			I2C      *i2c;
@@ -154,8 +182,12 @@
 			uint8_t   displayWidth;
 			uint8_t   displayHeight;
 			uint16_t  bufferSize;
-			uint8_t   displayBuffer[(SSD1306_MAX_WIDTH / 8) * SSD1306_MAX_HEIGHT];
 			bool      screenFlipped;
+
+			uint8_t   displayBuffer[(SSD1306_MAX_WIDTH / 8) * SSD1306_MAX_HEIGHT];
+			uint8_t   transferBuffer[sizeof(displayBuffer) + 1];
+			uint8_t   transferResponseBuffer[10];
+
 
 	};
 #endif

@@ -1,9 +1,10 @@
 #include "mbed.h"
 
 #include "SSD1306.h"
-#include "Chip8.h"
 #include "GameData.h"
 #include "games.h"
+#include "NanoGameEngine.h"
+#include "Chip8.h"
 
 
 //DigitalOut LED(LED1);
@@ -22,19 +23,51 @@ PwmOut    speaker(PA_1);
 AnalogOut    speakerDac(PA_4);
 
 
-
+uint8_t   gameCount;
 
 uint8_t   mem[4096];
-Chip8     chip;
+NanoGameEngine *gameEngine;
 const GameData *currGame;
 
 Ticker intervalTicker;
 
 uint8_t lastKey;
 
+
+uint8_t getGameCount(void)
+{
+	if(games[0].type == GT_EOL) {
+		return 0;
+	}
+
+	uint8_t ret = 0;
+
+	while(games[ret].type != GT_EOL) {
+		++ret;
+	}
+
+	return ret - 1;
+}
+
+
+uint8_t pickGame(void)
+{
+	display.drawString(25, 0, "Select A Game");
+
+	for(uint8_t i = 0; i < gameCount; ++i) {
+		display.drawString(6, i * 8 + 8, games[i].name);
+	}
+	display.update();
+
+	while(1) {}
+	//TODO
+	return 0;
+}
+
+
 uint8_t getCurrentKey(void)
 {
-	char ret = CHIP8_NOKEY;
+	char ret = NGE_NOKEY;
 
 	if (!up) {
 		ret = currGame->keyMap[0];
@@ -58,7 +91,7 @@ uint8_t getCurrentKey(void)
 
 uint8_t getKey(void)
 {
-	uint8_t ret = CHIP8_NOKEY;
+	uint8_t ret = NGE_NOKEY;
 	char    key = getCurrentKey();
 
 	if(key != lastKey) {
@@ -74,9 +107,6 @@ uint8_t getKey(void)
 
 int main()
 {
-	currGame = &games[0];
-	memcpy(mem + 0x200, currGame->data, currGame->size);
-
 	i2c.frequency(400000);
 
 	display.setScreenFlipped(true);
@@ -84,13 +114,22 @@ int main()
 	display.fillScreen(0);
 	display.update();
 
-	lastKey = CHIP8_NOKEY;
+	//BEGIN MASTER LOOP
+	gameCount = getGameCount();
+	uint8_t currGameIdx = pickGame();
 
-	chip.init(mem, sizeof(mem), &display);
+
+	// BEGIN NEW GAME
+	lastKey = NGE_NOKEY;
+
+	currGame = &games[currGameIdx];
+	gameEngine = (NanoGameEngine *)new Chip8();
+	gameEngine->loadMemory(mem, currGame->data, currGame->size);
+	gameEngine->init(mem, sizeof(mem), &display);
 
 	uint32_t nextFrameTime = 0;
 
-	intervalTicker.attach_us(Callback<void()>(&chip, &Chip8::intervalCallback), 16666);
+	intervalTicker.attach_us(Callback<void()>(gameEngine, &NanoGameEngine::intervalCallback), 16666);
 
 	const int microsconstPerFrame = 1000000 / currGame->framesPerSecond;
 	const int instructionsPerFrame = currGame->instructionsPerSecond / currGame->framesPerSecond;
@@ -101,11 +140,16 @@ int main()
 		if(currTime >= nextFrameTime) {
     		for(uint16_t i = 0; i < instructionsPerFrame; ++i) {
 				uint8_t key = getKey();
-				chip.runOne(key);
+
+				//TODO Test if exit key pressed
+
+				gameEngine->runOne(key);
     		}
 
 			display.update();
 			nextFrameTime = currTime + microsconstPerFrame;
 		}
     }
+    // END NEW GAME
+    // END MASTER LOOP
 }

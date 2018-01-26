@@ -25,7 +25,7 @@ All text above, and the splash screen must be included in any redistribution
 
 // standard ascii 5x7 font
 
-static unsigned char  font[] = {
+static const uint8_t  font[] = {
     0x00, 0x00, 0x00, 0x00, 0x00,   
     0x3E, 0x5B, 0x4F, 0x5B, 0x3E,     
     0x3E, 0x6B, 0x4F, 0x6B, 0x3E,     

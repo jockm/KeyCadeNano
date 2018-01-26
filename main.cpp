@@ -3,7 +3,7 @@
 #include "SSD1306.h"
 #include "Chip8.h"
 #include "GameData.h"
-#include "Games/tank.h"
+#include "games.h"
 
 
 //DigitalOut LED(LED1);
@@ -23,12 +23,6 @@ AnalogOut    speakerDac(PA_4);
 
 
 
-const GameData games[] = {
-//		 Type        IPS   FPS	Name                      U  D  L  R  C  1  2   Instructions Data         Size
-//       ___________ ____  ___  ______________________ ______________________   ____________ ____________ _______________________
-		{GT_CHIP8,    500,  25, "Tank",                "\x2\x8\x6\x4\xc\x1\x2", NULL,        game_tank,    sizeof(game_tank)},
-		{GT_EOL,        0,   0, NULL,                  NULL,                    NULL,        NULL,        0}
-};
 
 uint8_t   mem[4096];
 Chip8     chip;

@@ -5,7 +5,7 @@
  *      Author: jock
  */
 
-#ifndef GAMES_TANK_H_
+#ifndef GAMES_TANK_JEM_H_
 #define GAMES_TANK_H_
 
 
@@ -25,4 +25,4 @@ const uint8_t game_tank[] = {
 
 
 
-#endif /* GAMES_TANK_H_ */
+#endif /* GAMES_TANK_JEM_H_ */

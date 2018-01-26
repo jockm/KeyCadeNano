@@ -66,7 +66,7 @@ void Chip8::init(uint8_t *mem, uint16_t memSize, Screen *screen)
 	this->hz = 500;
 
 	this->waitingForKey = false;
-	this->currentKey = CHIP8_NOKEY;
+	this->currentKey = NGE_NOKEY;
 	this->keyDest = 0;
 
 	this->screenWidth = 64;
@@ -115,7 +115,7 @@ bool Chip8::runOne(uint8_t keyPressed)
 	bool ret = true;
 
 	if(this->waitingForKey) {
-		if(keyPressed == CHIP8_NOKEY) {
+		if(keyPressed == NGE_NOKEY) {
 			return true;
 		} else {
 			this->v[this->keyDest] = keyPressed;

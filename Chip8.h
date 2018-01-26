@@ -6,8 +6,6 @@
 #	include "SSD1306.h"
 #	include "NanoGameEngine.h"
 
-#	define CHIP8_NOKEY 0xFF
-
 #	define CHIP8_MAXWIDTH 128
 #	define CHIP8_MAXHEIGHT 64
 
@@ -28,12 +26,16 @@
 				this->screenHeight = 64;
 				this->enhancedMode = false;
 				this->vI = 0;
-				this->currentKey = CHIP8_NOKEY;
+				this->currentKey = NGE_NOKEY;
 				this->keyDest = 0;
 				this->screenDirty = false;
 				this->screen = NULL;
 			}
 
+
+			void loadMemory(uint8_t *mem, const uint8_t *prog, uint16_t progSize) {
+				memcpy(mem + 0x200, prog, progSize);
+			}
 
 			void init(uint8_t *prog, uint16_t memSize, Screen *screen);
 

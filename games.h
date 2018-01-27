@@ -153,7 +153,7 @@
 const GameData games[] = {
 //		 Type        IPS   FPS	Name                     U  D  L  R  C  1  2   Instructions Data         Size
 //       ___________ ____  ___  ______________________ ______________________  ____________ ____________ _______________________
-		{GT_CHIP8,    500,  25, "Tank",               "\x2\x8\x4\x6\xC\x1\x2", NULL,        game_tank,                                          sizeof(game_tank)},
+		{GT_CHIP8,    500,  25, "Tank Test",          "\x2\x8\x4\x6\xC\x1\x2", NULL,        game_tank,                                          sizeof(game_tank)},
 		{GT_CHIP8,    500,  25, "Airplane",           "\x8\x8\x8\x8\x8\x8\x8", NULL,        Airplane_ch8,                                       sizeof(Airplane_ch8)},
 		{GT_CHIP8,    500,  25, "Alien",              "\x2\x8\x3\xC\xA\xA\xA", NULL,        Alien_ch8,                                          sizeof(Alien_ch8)},
 		{GT_CHIP8,    500,  25, "Ant",                "\x2\x8\x3\xC\xA\xA\xA", NULL,        Ant_ch8,                                            sizeof(Ant_ch8)},

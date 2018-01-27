@@ -7,6 +7,24 @@
 #include "Chip8.h"
 
 
+#define _MAX(a,b) ((a)<(b))?(b):(a)
+#define _MIN(a,b) !((b)<(a))?(a):(b);
+
+enum {
+	RAWKEY_NONE    = NGE_NOKEY,
+	RAWKEY_EXIT    = NGE_EXIT,
+
+	RAWKEY_UP      = 0,
+	RAWKEY_DOWN    = 1,
+	RAWKEY_LEFT    = 2,
+	RAWKEY_RIGHT   = 3,
+	RAWKEY_CENTER  = 4,
+	RAWKEY_ACTION1 = 5,
+	RAWKEY_ACTION2 = 6,
+};
+
+
+
 //DigitalOut LED(LED1);
 I2C        i2c(PA_10, PA_9);
 SSD1306    display(&i2c, 0x78);
@@ -32,6 +50,7 @@ const GameData *currGame;
 Ticker intervalTicker;
 
 uint8_t lastKey;
+uint8_t lastMenuKey;
 
 
 uint8_t getGameCount(void)
@@ -46,43 +65,39 @@ uint8_t getGameCount(void)
 		++ret;
 	}
 
-	return ret - 1;
+	return ret;
 }
 
-
-uint8_t pickGame(void)
-{
-	display.drawString(25, 0, "Select A Game");
-
-	for(uint8_t i = 0; i < gameCount; ++i) {
-		display.drawString(6, i * 8 + 8, games[i].name);
-	}
-	display.update();
-
-	while(1) {}
-	//TODO
-	return 0;
-}
-
-
-uint8_t getCurrentKey(void)
+uint8_t getRawCurrentKey(void)
 {
 	char ret = NGE_NOKEY;
 
 	if (!up) {
-		ret = currGame->keyMap[0];
+		ret = RAWKEY_UP;
 	} else if (!down) {
-		ret = currGame->keyMap[1];
+		ret = RAWKEY_DOWN;
 	} else if (!left) {
-		ret = currGame->keyMap[2];
+		ret = RAWKEY_LEFT;
 	} else if (!right) {
-		ret = currGame->keyMap[3];
+		ret = RAWKEY_RIGHT;
 	} else if (!center) {
-		ret = currGame->keyMap[4];
+		ret = RAWKEY_CENTER;
 	} else if (!action1) {
-		ret = currGame->keyMap[5];
+		ret = RAWKEY_ACTION1;
 	} else if (!action2) {
-		ret = currGame->keyMap[6];
+		ret = RAWKEY_ACTION2;
+	}
+
+	return ret;
+}
+
+uint8_t getCurrentKey(void)
+{
+	uint8_t ret = NGE_NOKEY;
+	uint8_t key = getRawCurrentKey();
+
+	if(key != NGE_NOKEY) {
+		ret = currGame->keyMap[key];
 	}
 
 	return ret;
@@ -104,25 +119,89 @@ uint8_t getKey(void)
 }
 
 
-
-int main()
+uint8_t getMenuKey(void)
 {
-	i2c.frequency(400000);
+	uint8_t ret = NGE_NOKEY;
+	while((ret = getRawCurrentKey()) == lastMenuKey) {
+		wait_ms(50);
+	}
 
-	display.setScreenFlipped(true);
+	lastMenuKey = ret;
 
+	return ret;
+}
+
+uint8_t pickGame(void)
+{
+	static const int linesPerPage = 6;
+
+	bool done = false;
+
+	lastMenuKey = NGE_NOKEY;
+	uint8_t menuKey;
+
+	int8_t currIdx = 0;
+	int8_t pageTop = 0;
+	int8_t pageEnd = _MIN(pageTop + linesPerPage, gameCount);
+
+	bool updateMenu = true;
+
+	while(!done) {
+		if(updateMenu) {
+			updateMenu = false;
+
+			uint8_t yPos = 8;
+
+			display.fillScreen(0);
+			display.drawString(25, 0, "Select A Game");
+
+			for(uint8_t i = pageTop; i < pageEnd; ++i) {
+				if(i == currIdx) {
+					display.drawChar(0, yPos, '>');
+				}
+				display.drawString(6, yPos, games[i].name);
+				yPos += 8;
+			}
+			display.update();
+		}
+
+
+		menuKey = getMenuKey();
+
+		if(menuKey == RAWKEY_UP && currIdx > 0) {
+			updateMenu = true;
+
+			if(--currIdx < pageTop) {
+				pageTop = currIdx;
+			}
+		} else if(menuKey == RAWKEY_DOWN && currIdx < gameCount - 1) {
+			updateMenu = true;
+
+			if(++currIdx >= pageEnd) {
+				++pageTop;
+			}
+		} else if(menuKey == RAWKEY_ACTION1 || menuKey == RAWKEY_ACTION2) {
+			done = true;
+		}
+
+		pageEnd = _MIN(pageTop + linesPerPage, gameCount);
+	}
+
+	return currIdx;
+}
+
+
+
+void runGame(uint8_t gameIdx)
+{
 	display.fillScreen(0);
 	display.update();
 
-	//BEGIN MASTER LOOP
-	gameCount = getGameCount();
-	uint8_t currGameIdx = pickGame();
-
-
-	// BEGIN NEW GAME
 	lastKey = NGE_NOKEY;
 
-	currGame = &games[currGameIdx];
+	currGame = &games[gameIdx];
+
+	//TODO use factory method to create game engine
 	gameEngine = (NanoGameEngine *)new Chip8();
 	gameEngine->loadMemory(mem, currGame->data, currGame->size);
 	gameEngine->init(mem, sizeof(mem), &display);
@@ -134,22 +213,43 @@ int main()
 	const int microsconstPerFrame = 1000000 / currGame->framesPerSecond;
 	const int instructionsPerFrame = currGame->instructionsPerSecond / currGame->framesPerSecond;
 
-    while(true) {
-    	uint32_t currTime = us_ticker_read();
+	while(true) {
+		uint32_t currTime = us_ticker_read();
 
 		if(currTime >= nextFrameTime) {
-    		for(uint16_t i = 0; i < instructionsPerFrame; ++i) {
+			for(uint16_t i = 0; i < instructionsPerFrame; ++i) {
 				uint8_t key = getKey();
 
-				//TODO Test if exit key pressed
+				if(key == NGE_EXIT) {
+					// TODO Should there be a confirmation screen?
+					break;
+				}
 
 				gameEngine->runOne(key);
-    		}
+			}
 
 			display.update();
 			nextFrameTime = currTime + microsconstPerFrame;
 		}
-    }
-    // END NEW GAME
-    // END MASTER LOOP
+	}
+
+	delete gameEngine;
+}
+
+
+int main()
+{
+	i2c.frequency(400000);
+
+	display.setScreenFlipped(true);
+
+	display.fillScreen(0);
+	display.update();
+
+	gameCount = getGameCount();
+
+	while(true) {
+		uint8_t currGameIdx = pickGame();
+		runGame(currGameIdx);
+	}
 }

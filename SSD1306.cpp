@@ -176,24 +176,37 @@ void SSD1306::update()
 
 	transferBuffer[0] = 0x40;
 
-#if defined(SSD1306_TRANSFRER_ASYNC)
+	memcpy(transferBuffer + 1, this->displayBuffer, sizeof(this->displayBuffer));
+	this->i2c->write(this->i2cAddr, (const char *) this->transferBuffer, sizeof(this->displayBuffer) + 1);
+}
+
+
+void SSD1306::updateAsync()
+{
+	this->sendCommand(SSD1306_COLUMNADDR);
+	this->sendCommand(0);   // Column start address (0 = reset)
+	this->sendCommand(this->displayWidth - 1); // Column end address (127 = reset)
+
+	this->sendCommand(SSD1306_PAGEADDR);
+	this->sendCommand(0); // Page start address (0 = reset)
+
+	uint8_t pageAddr = 0;
+	if(this->displayHeight == 16) {
+		pageAddr = 1;
+	} else if(this->displayHeight == 16) {
+		pageAddr = 3;
+	} else {
+		pageAddr = 7;
+	}
+	this->sendCommand(pageAddr); // Page end address
+
+	transferBuffer[0] = 0x40;
+
 	event_callback_t callbackEvent;
 	callbackEvent.attach(this, &SSD1306::transferCallback);
 
 	memcpy(transferBuffer + 1, this->displayBuffer, sizeof(this->displayBuffer));
 	this->i2c->transfer(this->i2cAddr, (const char *) transferBuffer, sizeof(this->displayBuffer) + 1, (char *)transferResponseBuffer, sizeof(transferResponseBuffer), callbackEvent);
-#elif defined(SSD1306_TRANSFRER_SYNC_WHOLE)
-	memcpy(transferBuffer + 1, this->displayBuffer, sizeof(this->displayBuffer));
-	this->i2c->write(this->i2cAddr, (const char *) this->transferBuffer, sizeof(this->displayBuffer) + 1);
-#else
-	// send display buffer in 16 byte chunks
-	for(uint16_t i= 0; i < bufferSize; i += 16 )
-	{
-		memcpy(this->transferBuffer + 1, this->displayBuffer + i, 17);
-		this->i2c->write(this->i2cAddr, (const char *) this->transferBuffer, 17);
-	}
-#endif
-
 }
 
 

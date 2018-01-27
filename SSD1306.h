@@ -10,8 +10,8 @@
 #	define SSD1306_BLACK 0
 #	define SSD1306_WHITE 1
 
-#define SSD1306_TRANSFRER_ASYNC
-//#define SSD1306_TRANSFRER_SYNC_WHOLE
+//#define SSD1306_TRANSFRER_ASYNC
+#define SSD1306_TRANSFRER_SYNC_WHOLE
 //#define SSD1306_TRANSFRER_SYNC_CHUNK
 
 
@@ -31,6 +31,8 @@
 			};
 
 			void update();
+			void updateAsync();
+
 			void drawBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h);
 			void xorBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h);
 			void drawChar(uint8_t x, uint8_t y, const char ch);

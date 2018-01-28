@@ -303,7 +303,7 @@ inline bool Chip8::runKeyOp(uint8_t op, uint8_t x)
 
 	if(op == 0x9E) {
 		ret = this->doSkipKey(x);
-	} else if(op == 0x9E) {
+	} else if(op == 0xA1) {
 		ret = this->doSkipNotKey(x);
 	}
 
@@ -317,7 +317,7 @@ inline bool Chip8::runOtherOtherOp(uint8_t x, uint8_t op)
 
 	switch(op) {
 		case 0x07:
-			ret = this->doLoadDelay(x);
+			ret = this->doLoadVarDelay(x);
 			break;
 
 		case 0x0A:
@@ -684,7 +684,8 @@ inline bool Chip8::doDraw(uint8_t x, uint8_t y, uint8_t height)
 	// Because we know the screen is flipped we are going to do the math
 	// once and not on every drawPixel call
 	x = this->screenWidth - 1 - this->v[x];
-	y = this->screenHeight - 1 - this->v[y];
+	y = this->screenHeight - 1 - this->v[y] - height;
+//	y = y - 1;
 
 
 	uint16_t addr = this->vI;
@@ -751,7 +752,7 @@ inline bool Chip8::doSkipNotKey(uint8_t x)
 // FX07     VX := delay_timer
 inline bool Chip8::doLoadVarDelay(uint8_t x)
 {
-	this->delayCounter = this->v[x];
+	this->v[x] = this->delayCounter;
 
 	return true;
 }

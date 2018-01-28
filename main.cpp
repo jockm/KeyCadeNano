@@ -72,7 +72,9 @@ uint8_t getRawCurrentKey(void)
 {
 	char ret = NGE_NOKEY;
 
-	if (!up) {
+	if(!center && !action1 && !action2) {
+		ret = NGE_EXIT;
+	} else if (!up) {
 		ret = RAWKEY_UP;
 	} else if (!down) {
 		ret = RAWKEY_DOWN;
@@ -91,10 +93,14 @@ uint8_t getRawCurrentKey(void)
 	return ret;
 }
 
-uint8_t getCurrentKey(void)
+uint8_t getCurrentGameKey(void)
 {
 	uint8_t ret = NGE_NOKEY;
 	uint8_t key = getRawCurrentKey();
+
+	if(key == RAWKEY_EXIT) {
+		return NGE_EXIT;
+	}
 
 	if(key != NGE_NOKEY) {
 		ret = currGame->keyMap[key];
@@ -104,10 +110,10 @@ uint8_t getCurrentKey(void)
 }
 
 
-uint8_t getKey(void)
+uint8_t getGameKey(void)
 {
 	uint8_t ret = NGE_NOKEY;
-	char    key = getCurrentKey();
+	char    key = getCurrentGameKey();
 
 	if(key != lastKey) {
 		ret = key;
@@ -180,7 +186,7 @@ uint8_t pickGame(void)
 			if(++currIdx >= pageEnd) {
 				++pageTop;
 			}
-		} else if(menuKey == RAWKEY_ACTION1 || menuKey == RAWKEY_ACTION2) {
+		} else if(menuKey == RAWKEY_ACTION1 || menuKey == RAWKEY_ACTION2 || menuKey == RAWKEY_CENTER) {
 			done = true;
 		}
 
@@ -194,6 +200,8 @@ uint8_t pickGame(void)
 
 void runGame(uint8_t gameIdx)
 {
+	bool done = false;
+
 	display.fillScreen(0);
 	display.update();
 
@@ -207,27 +215,34 @@ void runGame(uint8_t gameIdx)
 	gameEngine->init(mem, sizeof(mem), &display);
 
 	uint32_t nextFrameTime = 0;
+	uint32_t nextDecrementTime = 0;
 
-	intervalTicker.attach_us(Callback<void()>(gameEngine, &NanoGameEngine::intervalCallback), 16666);
+//	intervalTicker.attach_us(Callback<void()>(gameEngine, &NanoGameEngine::intervalCallback), 16666);
 
 	const int microsconstPerFrame = 1000000 / currGame->framesPerSecond;
 	const int instructionsPerFrame = currGame->instructionsPerSecond / currGame->framesPerSecond;
 
-	while(true) {
+	while(!done) {
 		uint32_t currTime = us_ticker_read();
 
 		if(currTime >= nextFrameTime) {
 			for(uint16_t i = 0; i < instructionsPerFrame; ++i) {
-				uint8_t key = getKey();
+				if(us_ticker_read() >= nextDecrementTime) {
+					gameEngine->intervalCallback();
+					nextDecrementTime = us_ticker_read() + 16666;
+				}
+				uint8_t key = getCurrentGameKey();
 
 				if(key == NGE_EXIT) {
 					// TODO Should there be a confirmation screen?
+					done = true;
 					break;
 				}
 
 				gameEngine->runOne(key);
 			}
 
+			//TODO make this async?
 			display.update();
 			nextFrameTime = currTime + microsconstPerFrame;
 		}

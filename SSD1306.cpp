@@ -288,14 +288,51 @@ void SSD1306::scrollRight(uint8_t n)
 
 void SSD1306::scrollUp(uint8_t n)
 {
+	uint8_t targetY = 0;
+	uint8_t sourceY = targetY + n;
+	uint8_t rowCount = this->displayHeight - n;
+
 	// todo implement me
+	for(uint8_t i = 0; i < rowCount; ++i) {
+		for(uint8_t x = 0; x < this->displayWidth; ++x) {
+			uint8_t c = this->getPixel(x, sourceY);
+			this->drawPixel(x, targetY, c);
+		}
+
+		++sourceY;
+		++targetY;
+	}
+
+	for(uint8_t y = 0; y < n; ++y) {
+		for(uint8_t x = 0; x < this->displayWidth; ++x) {
+			this->drawPixel(x, y, 0);
+		}
+	}
 }
 
 
 void SSD1306::scrollDown(uint8_t n)
-
 {
+	uint8_t targetY = this->displayHeight - 1;
+	uint8_t sourceY = targetY - n;
+	uint8_t rowCount = this->displayHeight - n;
+
 	// todo implement me
+	for(uint8_t i = 0; i < rowCount; ++i) {
+		for(uint8_t x = 0; x < this->displayWidth; ++x) {
+			uint8_t c = this->getPixel(x, sourceY);
+			this->drawPixel(x, targetY, c);
+		}
+
+		--sourceY;
+		--targetY;
+	}
+
+	for(uint8_t y = 0; y < n; ++y) {
+		for(uint8_t x = 0; x < this->displayWidth; ++x) {
+			this->drawPixel(x, y, 0);
+		}
+	}
 }
 
 

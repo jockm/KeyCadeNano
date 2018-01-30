@@ -276,13 +276,51 @@ void SSD1306::drawChar(uint8_t x, uint8_t y, const char ch)
 
 void SSD1306::scrollLeft(uint8_t n)
 {
+	uint8_t targetX = this->displayWidth - 1;
+	uint8_t sourceX = targetX - n;
+	uint8_t colCount = this->displayWidth - n;
+
 	// todo implement me
+	for(uint8_t i = 0; i < colCount; ++i) {
+		for(uint8_t y = 0; y < this->displayHeight; ++y) {
+			uint8_t c = this->getPixel(sourceX, y);
+			this->drawPixel(targetX, y, c);
+		}
+
+		--sourceX;
+		--targetX;
+	}
+
+	for(uint8_t y = 0; y < n; ++y) {
+		for(uint8_t x = 0; x < this->displayHeight; ++x) {
+			this->drawPixel(x, y, 0);
+		}
+	}
 }
 
 
 void SSD1306::scrollRight(uint8_t n)
 {
+	uint8_t targetX = 0;
+	uint8_t sourceX = targetX + n;
+	uint8_t colCount = this->displayWidth - n;
+
 	// todo implement me
+	for(uint8_t i = 0; i < colCount; ++i) {
+		for(uint8_t y = 0; y < this->displayHeight; ++y) {
+			uint8_t c = this->getPixel(sourceX, y);
+			this->drawPixel(targetX, y, c);
+		}
+
+		++sourceX;
+		++targetX;
+	}
+
+	for(uint8_t y = 0; y < n; ++y) {
+		for(uint8_t x = 0; x < this->displayHeight; ++x) {
+			this->drawPixel(x, y, 0);
+		}
+	}
 }
 
 

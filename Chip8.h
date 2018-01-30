@@ -22,8 +22,8 @@
 				this->soundCounter = 0;
 				this->hz = 0;
 				this->waitingForKey = false;
-				this->screenWidth = 32;
-				this->screenHeight = 64;
+				this->screenWidth = CHIP8_MAXWIDTH / 2;
+				this->screenHeight = CHIP8_MAXHEIGHT / 2;
 				this->enhancedMode = false;
 				this->vI = 0;
 				this->currentKey = NGE_NOKEY;

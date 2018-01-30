@@ -69,8 +69,8 @@ void Chip8::init(uint8_t *mem, uint16_t memSize, Screen *screen)
 	this->currentKey = NGE_NOKEY;
 	this->keyDest = 0;
 
-	this->screenWidth = 64;
-	this->screenHeight = 32;
+	this->screenWidth = CHIP8_MAXWIDTH / 2;
+	this->screenHeight = CHIP8_MAXHEIGHT / 2;
 	this->enhancedMode = false;
 
 	this->screenDirty = false;
@@ -92,21 +92,13 @@ inline bool Chip8::drawPixel(uint8_t x, uint8_t y, bool on)
 		y *= 2;
 	}
 
-#if 1
 	bool ret = this->screen->xorRawPixel(x, y, on);
 	if(!this->enhancedMode) {
 		this->screen->xorRawPixel(x + 1, y, on);
 		this->screen->xorRawPixel(x, y + 1, on);
 		this->screen->xorRawPixel(x + 1, y + 1, on);
 	}
-#else
-	bool ret = this->screen->xorPixel(x, y, on);
-	if(!this->enhancedMode) {
-		this->screen->xorPixel(x + 1, y, on);
-		this->screen->xorPixel(x, y + 1, on);
-		this->screen->xorPixel(x + 1, y + 1, on);
-	}
-#endif
+
 	return ret;
 }
 
@@ -450,8 +442,8 @@ inline bool Chip8::doExit()
 // 00FE*    Disable extended screen mode
 inline bool Chip8::doScreenNormal()
 {
-	this->screenWidth = 64;
-	this->screenHeight = 32;
+	this->screenWidth = CHIP8_MAXWIDTH / 2;
+	this->screenHeight = CHIP8_MAXHEIGHT / 2;
 	this->enhancedMode = false;
 
 	this->doCls();
@@ -463,8 +455,8 @@ inline bool Chip8::doScreenNormal()
 // *    Enable extended screen mode for full-screen graphics
 inline bool Chip8::doScreenExtended()
 {
-	this->screenWidth = 128;
-	this->screenHeight = 64;
+	this->screenWidth = CHIP8_MAXWIDTH;
+	this->screenHeight = CHIP8_MAXHEIGHT;
 	this->enhancedMode = true;
 
 	this->doCls();
@@ -671,7 +663,7 @@ inline bool Chip8::doLoadRandom(uint8_t x, uint8_t kk)
 
 // DXYN*    Show N-byte sprite from M(I) at coords (VX,VY), VF :=
 // collision. If N=0 and extended mode, show 16x16 sprite.
-inline bool Chip8::doDraw(uint8_t x, uint8_t y, uint8_t height)
+inline bool Chip8::doDraw(uint8_t vx, uint8_t vy, uint8_t height)
 {
 	bool collision = false;
 	uint8_t byteWidth = 1;
@@ -683,16 +675,26 @@ inline bool Chip8::doDraw(uint8_t x, uint8_t y, uint8_t height)
 
 	// Because we know the screen is flipped we are going to do the math
 	// once and not on every drawPixel call
-	x = this->screenWidth - 1 - this->v[x];
-	y = this->screenHeight - 1 - this->v[y] - height;
-//	y = y - 1;
+	int8_t x = this->v[vx];
+	int8_t y = this->v[vy];
+
+	x %= this->screenWidth;
+	y %= this->screenHeight;
+
+
+//	x = this->screenWidth - 1 - x;
+//	y = this->screenHeight - 1 - y - height;
+	x = (this->screenWidth - 1) - x;
+	y = (this->screenHeight - 1) - y - (height - 1);
 
 
 	uint16_t addr = this->vI;
+	uint16_t yPos = y + (height - 1);
 
-	for(uint16_t yPos = y + height - 1; yPos >= y; --yPos) {
+	for(uint16_t i = 0; i < height; ++i) {
 		uint16_t xPos = x;
-		for(uint16_t i = 0; i < byteWidth; ++i) {
+
+		for(uint16_t j = 0; j < byteWidth; ++j) {
 			uint8_t pixelByte = this->mem[addr++];
 
 			uint8_t color0 = pixelByte & (1 << 7);
@@ -717,6 +719,8 @@ inline bool Chip8::doDraw(uint8_t x, uint8_t y, uint8_t height)
 					| collision3 | collision4 | collision5
 					| collision6 | collision7;
 		}
+
+		--yPos;
 	}
 
 	this->v[0xF] = collision;
@@ -788,7 +792,7 @@ inline bool Chip8::doLoadSound(uint8_t x)
 // FX1E     I := I + VX
 inline bool Chip8::doAddIndex(uint8_t x)
 {
-	this->vI = this->v[x];
+	this->vI += this->v[x];
 
 	return true;
 }

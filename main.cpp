@@ -37,6 +37,8 @@ DigitalIn center(PA_5, PullUp);
 DigitalIn action1(PB_1, PullUp);
 DigitalIn action2(PA_8, PullUp);
 
+//PwmOut    speaker(PA_1);
+//AnalogOut    speakerDac(PA_4);
 PwmOut    speaker(PA_1);
 AnalogOut    speakerDac(PA_4);
 
@@ -236,6 +238,8 @@ void runGame(uint8_t gameIdx)
 				if(key == NGE_EXIT) {
 					// TODO Should there be a confirmation screen?
 					done = true;
+
+					wait(0.5);
 					break;
 				}
 

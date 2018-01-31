@@ -576,9 +576,9 @@ inline bool Chip8::doBitXor(uint8_t x, uint8_t y)
 // 8XY4     VX := VX + VY, VF := carry
 inline bool Chip8::doAdd(uint8_t x, uint8_t y)
 {
-	uint16_t result = (uint16_t) this->v[x] +  (uint16_t) this->v[y];
+	uint16_t result = (uint16_t) this->v[x] + (uint16_t) this->v[y];
 
-	this->v[0xF] = result > 0xFF ? 1 : 0;
+	this->v[0xF] = (result > 0xFF) ? 1 : 0;
 	this->v[x] = result & 0xFF;
 
 	return true;
@@ -588,7 +588,7 @@ inline bool Chip8::doAdd(uint8_t x, uint8_t y)
 // 8XY5     VX := VX - VY, VF := not borrow
 inline bool Chip8::doSub(uint8_t x, uint8_t y)
 {
-	this->v[0xF] = !!this->v[x] > this->v[y];
+	this->v[0xF] = (this->v[x] > this->v[y]) ? 1 : 0;
 	this->v[x] -= this->v[y];
 
 	return true;
@@ -608,7 +608,7 @@ inline bool Chip8::doShiftRight(uint8_t x)
 // 8XY7     VX := VY - VX, VF := not borrow
 inline bool Chip8::doSubN(uint8_t x, uint8_t y)
 {
-	this->v[0xF] = !!this->v[y] > this->v[x];
+	this->v[0xF] = (this->v[y] > this->v[x]) ? 1 : 0;
 	this->v[x] = this->v[y] - this->v[x];
 
 	return true;

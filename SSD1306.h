@@ -80,7 +80,7 @@
 			inline bool xorRawPixel(uint8_t x, uint8_t y, uint8_t color)
 			{
 				uint8_t pixel = this->getRawPixel(x, y);
-				color = color ? 1 : 0;
+				color = !!color;
 
 				bool ret = pixel && color;
 

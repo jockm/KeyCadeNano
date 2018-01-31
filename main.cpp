@@ -39,8 +39,8 @@ DigitalIn action2(PA_8, PullUp);
 
 //PwmOut    speaker(PA_1);
 //AnalogOut    speakerDac(PA_4);
-PwmOut    speaker(PA_1);
-AnalogOut    speakerDac(PA_4);
+//PwmOut    speaker(PA_1);
+//AnalogOut    speakerDac(PA_4);
 
 
 uint8_t   gameCount;

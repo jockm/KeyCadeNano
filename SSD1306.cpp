@@ -291,8 +291,8 @@ void SSD1306::scrollLeft(uint8_t n)
 		--targetX;
 	}
 
-	for(uint8_t y = 0; y < n; ++y) {
-		for(uint8_t x = 0; x < this->displayHeight; ++x) {
+	for(uint8_t x = this->displayWidth - n; x < this->displayWidth; ++x) {
+		for(uint8_t y = 0; y < this->displayHeight; ++y) {
 			this->drawPixel(x, y, 0);
 		}
 	}
@@ -316,8 +316,8 @@ void SSD1306::scrollRight(uint8_t n)
 		++targetX;
 	}
 
-	for(uint8_t y = 0; y < n; ++y) {
-		for(uint8_t x = 0; x < this->displayHeight; ++x) {
+	for(uint8_t x = 0; x < n; ++x) {
+		for(uint8_t y = 0; y < this->displayHeight; ++y) {
 			this->drawPixel(x, y, 0);
 		}
 	}

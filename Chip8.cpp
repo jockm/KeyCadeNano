@@ -170,6 +170,7 @@ bool Chip8::runOne(uint8_t keyPressed)
 			break;
 
 		case 0xA:
+			// ANNN     I := NNN
 			this->vI = nnn;
 			break;
 
@@ -656,7 +657,8 @@ inline bool Chip8::doJumpV0(uint16_t nnn)
 // CXKK     VX := pseudorandom_number and KK
 inline bool Chip8::doLoadRandom(uint8_t x, uint8_t kk)
 {
-
+    uint8_t randNum = rand() & kk;
+    this->v[x] = randNum;
 	return true;
 }
 
@@ -682,8 +684,6 @@ inline bool Chip8::doDraw(uint8_t vx, uint8_t vy, uint8_t height)
 	y %= this->screenHeight;
 
 
-//	x = this->screenWidth - 1 - x;
-//	y = this->screenHeight - 1 - y - height;
 	x = (this->screenWidth - 1) - x;
 	y = (this->screenHeight - 1) - y - (height - 1);
 
@@ -726,6 +726,7 @@ inline bool Chip8::doDraw(uint8_t vx, uint8_t vy, uint8_t height)
 	this->v[0xF] = collision;
 
 	this->screenDirty = true;
+	this->screen->update();//DUCK
 
 	return true;
 }
@@ -819,8 +820,8 @@ inline bool Chip8::doSetIndexBigDigit(uint8_t x)
 inline bool Chip8::doLoadBcd(uint8_t x)
 {
 	this->mem[this->vI] = this->v[x] / 100;
-	this->mem[this->vI] = this->v[x] % 100 / 10;
-	this->mem[this->vI] = this->v[x] % 100;
+	this->mem[this->vI + 1] = this->v[x] % 100 / 10;
+	this->mem[this->vI + 2] = this->v[x] % 100;
 
 	return true;
 }
@@ -829,7 +830,7 @@ inline bool Chip8::doLoadBcd(uint8_t x)
 // FX55     Store V0..VX in memory starting at M(I)
 inline bool Chip8::doStoreVars(uint8_t x)
 {
-	for(uint8_t i = 0; i < x; ++i) {
+	for(uint8_t i = 0; i <= x; ++i) {
 		this->mem[this->vI + i] = this->v[i];
 	}
 
@@ -840,7 +841,7 @@ inline bool Chip8::doStoreVars(uint8_t x)
 // FX65     Read V0..VX from memory starting at M(I)
 inline bool Chip8::doLoadVars(uint8_t x)
 {
-	for(uint8_t i = 0; i < x; ++i) {
+	for(uint8_t i = 0; i <= x; ++i) {
 		this->v[i] = mem[this->vI + i];
 	}
 
@@ -851,7 +852,7 @@ inline bool Chip8::doLoadVars(uint8_t x)
 // FX75*    Store V0..VX in RPL user flags (X <= 7)
 inline bool Chip8::doStoreVarsRpl(uint8_t x)
 {
-	for(uint8_t i = 0; i < x; ++i) {
+	for(uint8_t i = 0; i <= x; ++i) {
 		this->rpl[i] = this->v[i];
 	}
 
@@ -862,7 +863,7 @@ inline bool Chip8::doStoreVarsRpl(uint8_t x)
 // FX85*    Read V0..VX from RPL user flags (X <= 7)
 inline bool Chip8::doLoadVarsRpl(uint8_t x)
 {
-	for(uint8_t i = 0; i < x; ++i) {
+	for(uint8_t i = 0; i <= x; ++i) {
 		this->v[i] = this->rpl[i];
 	}
 

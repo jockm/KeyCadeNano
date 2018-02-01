@@ -84,8 +84,16 @@ void Chip8::init(uint8_t *mem, uint16_t memSize, Screen *screen)
 
 inline bool Chip8::drawPixel(uint8_t x, uint8_t y, bool on)
 {
-	x %= this->screenWidth;
-	y %= this->screenHeight;
+	// As per: http://www.emulator101.com/chip-8-sprites.html
+	// Drawubg us clipped at the screen edge and not wrapped
+
+
+	if(x > this->screenWidth || y > this->screenHeight) {
+		return false;
+	}
+
+//	x %= this->screenWidth;
+//	y %= this->screenHeight;
 
 	if(!this->enhancedMode) {
 		x *= 2;
@@ -102,6 +110,8 @@ inline bool Chip8::drawPixel(uint8_t x, uint8_t y, bool on)
 	return ret;
 }
 
+static bool duckTracing = false;
+
 bool Chip8::runOne(uint8_t keyPressed)
 {
 	bool ret = true;
@@ -117,6 +127,9 @@ bool Chip8::runOne(uint8_t keyPressed)
 
 	this->currentKey = keyPressed;
 
+	if(this->pc == 0x2B6) {//duck
+		duckTracing = true;
+	}
 	uint16_t inst = (this->mem[this->pc] << 8) |  this->mem[this->pc + 1];
 
 	this->pc += 2;
@@ -127,6 +140,10 @@ bool Chip8::runOne(uint8_t keyPressed)
 	uint16_t kk = inst & 0x00FF;
 	uint8_t x = (inst & 0x0F00) >> 8;
 	uint8_t y = (inst & 0x00F0) >> 4;
+
+	if(duckTracing) {
+		duckTracing = true;
+	}
 
 	switch(instType) {
 		case 0x0:
@@ -166,7 +183,7 @@ bool Chip8::runOne(uint8_t keyPressed)
 			break;
 
 		case 0x9:
-			ret = this->doSkipEqVar(x, y);
+			ret = this->doSkipNeqVar(x, y);
 			break;
 
 		case 0xA:
@@ -511,7 +528,7 @@ inline bool Chip8::doSkipNeq(uint8_t x, uint8_t kk)
 // 5XY0     Skip next instruction if VX == VY
 inline bool Chip8::doSkipEqVar(uint8_t x, uint8_t y)
 {
-	if(this->v[x] != this->v[y]) {
+	if(this->v[x] == this->v[y]) {
 		this->pc += 2;
 	}
 
@@ -715,7 +732,7 @@ inline bool Chip8::doDraw(uint8_t vx, uint8_t vy, uint8_t height)
 			uint8_t collision6 = this->drawPixel(xPos--, yPos, color6);
 			uint8_t collision7 = this->drawPixel(xPos--, yPos, color7);
 
-			collision = collision0 | collision1 | collision2
+			collision |= collision0 | collision1 | collision2
 					| collision3 | collision4 | collision5
 					| collision6 | collision7;
 		}
@@ -811,7 +828,7 @@ inline bool Chip8::doSetIndexDigit(uint8_t x)
 // *    Point I to 10-byte font sprite for digit VX (0..9)
 inline bool Chip8::doSetIndexBigDigit(uint8_t x)
 {
-	this->vI = 80 + x * 0xA;
+	this->vI = 80 + this->v[x] * 0xA;
 	return false;
 }
 
@@ -821,7 +838,7 @@ inline bool Chip8::doLoadBcd(uint8_t x)
 {
 	this->mem[this->vI] = this->v[x] / 100;
 	this->mem[this->vI + 1] = this->v[x] % 100 / 10;
-	this->mem[this->vI + 2] = this->v[x] % 100;
+	this->mem[this->vI + 2] = this->v[x] % 100 % 10;
 
 	return true;
 }

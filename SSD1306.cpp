@@ -291,11 +291,25 @@ void SSD1306::scrollLeft(uint8_t n)
 		--targetX;
 	}
 
-	for(uint8_t x = this->displayWidth - n; x < this->displayWidth; ++x) {
-		for(uint8_t y = 0; y < this->displayHeight; ++y) {
-			this->drawPixel(x, y, 0);
-		}
-	}
+
+//	sourceX = this->displayWidth - n * 4;
+//	targetX = this->displayWidth - n;
+//
+//	for(uint8_t x = this->displayWidth - n; x < this->displayWidth; ++x) {
+//		for(uint8_t y = 0; y < this->displayHeight; ++y) {
+//			uint8_t c = this->getPixel(sourceX, y);
+//			this->drawPixel(targetX, y, c);
+//		}
+//
+//		++sourceX;
+//		++targetX;
+//	}
+
+//	for(uint8_t x = this->displayWidth - n; x < this->displayWidth; ++x) {
+//		for(uint8_t y = 0; y < this->displayHeight; ++y) {
+//			this->drawPixel(x, y, 0);
+//		}
+//	}
 }
 
 
@@ -305,7 +319,6 @@ void SSD1306::scrollRight(uint8_t n)
 	uint8_t sourceX = targetX + n;
 	uint8_t colCount = this->displayWidth - n;
 
-	// todo implement me
 	for(uint8_t i = 0; i < colCount; ++i) {
 		for(uint8_t y = 0; y < this->displayHeight; ++y) {
 			uint8_t c = this->getPixel(sourceX, y);
@@ -316,11 +329,25 @@ void SSD1306::scrollRight(uint8_t n)
 		++targetX;
 	}
 
-	for(uint8_t x = 0; x < n; ++x) {
-		for(uint8_t y = 0; y < this->displayHeight; ++y) {
-			this->drawPixel(x, y, 0);
-		}
-	}
+
+//	sourceX = this->displayWidth - n * 4;
+//	targetX = this->displayWidth - n;
+//
+//	for(uint8_t x = this->displayWidth - n; x < this->displayWidth; ++x) {
+//		for(uint8_t y = 0; y < this->displayHeight; ++y) {
+//			uint8_t c = this->getPixel(sourceX, y);
+//			this->drawPixel(targetX, y, c);
+//		}
+//
+//		++sourceX;
+//		++targetX;
+//	}
+
+//	for(uint8_t x = 0; x < n; ++x) {
+//		for(uint8_t y = 0; y < this->displayHeight; ++y) {
+//			this->drawPixel(x, y, 0);
+//		}
+//	}
 }
 
 
@@ -330,7 +357,6 @@ void SSD1306::scrollUp(uint8_t n)
 	uint8_t sourceY = targetY + n;
 	uint8_t rowCount = this->displayHeight - n;
 
-	// todo implement me
 	for(uint8_t i = 0; i < rowCount; ++i) {
 		for(uint8_t x = 0; x < this->displayWidth; ++x) {
 			uint8_t c = this->getPixel(x, sourceY);

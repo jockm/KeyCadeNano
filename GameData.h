@@ -15,10 +15,16 @@
 		GT_EOL = 0xFF
 	};
 
+	enum GameFlags {
+		GF_NONE = 0,
+		GF_NOYWRAP = 0b0000000000000000,
+	};
+
 	typedef struct {
 		uint8_t       type;
 		uint16_t       instructionsPerSecond;
 		uint16_t       framesPerSecond;
+		uint16_t       flags;
 		const char    *name;
 		const char    *keyMap;
 		const char    *instuctions;

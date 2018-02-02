@@ -160,7 +160,6 @@ const GameData games[] = {
 		{GT_EOL,        0,   0, NULL,                 NULL,                   NULL,         NULL,        0}
 };
 
-//Note1: Seems to be working according to the code, don't know why it is different in other emulators
 
 
 #endif /* GAMES_H_ */

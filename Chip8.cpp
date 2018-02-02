@@ -110,8 +110,6 @@ inline bool Chip8::drawPixel(uint8_t x, uint8_t y, bool on)
 	return ret;
 }
 
-static bool duckTracing = false;
-
 bool Chip8::runOne(uint8_t keyPressed)
 {
 	bool ret = true;
@@ -127,9 +125,6 @@ bool Chip8::runOne(uint8_t keyPressed)
 
 	this->currentKey = keyPressed;
 
-	if(this->pc == 0x2B6) {//duck
-		duckTracing = true;
-	}
 	uint16_t inst = (this->mem[this->pc] << 8) |  this->mem[this->pc + 1];
 
 	this->pc += 2;
@@ -140,10 +135,6 @@ bool Chip8::runOne(uint8_t keyPressed)
 	uint16_t kk = inst & 0x00FF;
 	uint8_t x = (inst & 0x0F00) >> 8;
 	uint8_t y = (inst & 0x00F0) >> 4;
-
-	if(duckTracing) {
-		duckTracing = true;
-	}
 
 	switch(instType) {
 		case 0x0:
@@ -743,7 +734,6 @@ inline bool Chip8::doDraw(uint8_t vx, uint8_t vy, uint8_t height)
 	this->v[0xF] = collision;
 
 	this->screenDirty = true;
-	this->screen->update();//DUCK
 
 	return true;
 }

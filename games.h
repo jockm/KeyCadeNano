@@ -18,6 +18,7 @@
 #include "Games/Alien.h"
 #include "Games/Ant.h"
 #include "Games/Astro_Dodge_Hires_Revival_Studios_2008.h"
+#include "Games/Astro_Dodge_Revival_Studios_2008.h"
 #include "Games/Blinky.h"
 #include "Games/Blitz_David_Winter.h"
 #include "Games/Brix_Andreas_Gustafsson_1990.h"
@@ -126,37 +127,36 @@
 const GameData games[] = {
 //		 Type        IPS   FPS	Flags    Name                     U  D  L  R  C  1  2   Instructions Data         Size
 //       ___________ ____  ___  _______  ______________________ ______________________  ____________ ____________ _______________________
-//		{GT_CHIP8,    500,  25, GF_NONE, "Tank Test",          "\x2\x8\x4\x6\xC\x1\x2", NULL,        game_tank,                                          sizeof(game_tank)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Airplane",           "\x8\x8\x8\x8\x8\x8\x8", NULL,        Airplane_ch8,                                       sizeof(Airplane_ch8)},
-		{GT_CHIP8,    500,  25, GF_NONE, "Ant",                "\x1\x1\x3\xC\xA\xA\xA", NULL,        Ant_ch8,                                            sizeof(Ant_ch8)},
-		{GT_CHIP8,    500,  25, GF_NONE, "Astro Dodge Hires",  "\x2\x8\x4\x6\x5\x5\x5", NULL,        Astro_Dodge_Hires_Revival_Studios_2008_ch8,         sizeof(Astro_Dodge_Hires_Revival_Studios_2008_ch8)},
-//WORKS		{GT_CHIP8,   1000,  25, GF_NONE, "Blinky",             "\x3\x6\x7\x8\xF\xF\xF", NULL,        Blinky_ch8,                                         sizeof(Blinky_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Blitz",              "\x5\x5\x5\x5\x5\x5\x5", NULL,        Blitz_David_Winter_ch8,                             sizeof(Blitz_David_Winter_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Brix",               "\x2\x8\x4\x6\xC\x1\x2", NULL,        Brix_Andreas_Gustafsson_1990_ch8,                   sizeof(Brix_Andreas_Gustafsson_1990_ch8)},
-//WORKS		{GT_CHIP8,   1000,  25, GF_NONE, "Car",                "\x2\x1\x7\x8\xC\x1\x2", NULL,        Car_ch8,                                            sizeof(Car_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Cave",               "\x2\x8\x4\x6\xF\xF\xF", NULL,        Cave_ch8,                                           sizeof(Cave_ch8)},
-		{GT_CHIP8,    500,  25, GF_NONE, "Dragon",             "\x2\x8\x4\x6\x5\x5\x5", NULL,        Dragon2_ch8,                                        sizeof(Dragon2_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Filter",             "\x2\x8\x4\x6\xc\x1\x2", NULL,        Filter_ch8,                                         sizeof(Filter_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Hidden",             "\x2\x8\x4\x6\x5\x5\x5", NULL,        Hidden_David_Winter_1996_ch8,                       sizeof(Hidden_David_Winter_1996_ch8)},
-//WORKS		{GT_CHIP8,   1000,  25, GF_NONE, "Joust",              "\x2\x8\x3\xC\xA\xA\xA", NULL,        Joust23_ch8,                                        sizeof(Joust23_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Landing",            "\x1\x2\x3\x4\x8\x8\x8", NULL,        Landing_ch8,                                        sizeof(Landing_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Mine",               "\x2\x8\x4\x6\x5\x5\x5", NULL,        Mines_ch8,                                          sizeof(Mines_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Piper",              "\x3\x6\x7\x8\xF\x4\x1", NULL,        Piper_ch8,                                          sizeof(Piper_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Pong 1 Player",      "\x1\x4\x5\x5\x5\x5\x5", NULL,        Pong_1_player_ch8,                                  sizeof(Pong_1_player_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Puzzle",             "\x2\x8\x4\x6\xc\x1\x2", NULL,        Puzzle_ch8,                                         sizeof(Puzzle_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Race",               "\x1\x1\x7\x8\xC\x1\x2", NULL,        Race_ch8,                                           sizeof(Race_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Rocket Launch",      "\x2\x8\x4\x6\xB\xB\xB", NULL,        Rocket_Launch_Jonas_Lindstedt_ch8,                  sizeof(Rocket_Launch_Jonas_Lindstedt_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Space Flight",       "\x1\x4\x2\x2\xF\xE\xF", NULL,        Space_Flight_ch8,                                   sizeof(Space_Flight_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Space Invaders",     "\x2\x8\x4\x6\x5\x5\x5", NULL,        Space_Invaders_David_Winter_ch8,                    sizeof(Space_Invaders_David_Winter_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Squash",             "\x1\x4\x5\x5\x5\x5\x5", NULL,        Squash_David_Winter_ch8,                            sizeof(Squash_David_Winter_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Submarine",          "\x2\x8\x4\x6\x5\x5\x5", NULL,        Submarine_Carmelo_Cortez_1978_ch8,                  sizeof(Submarine_Carmelo_Cortez_1978_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Syzygy",             "\x3\x6\x7\x8\xF\xF\xF", NULL,        Syzygy_Roy_Trevino_1990_ch8,                        sizeof(Syzygy_Roy_Trevino_1990_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Tapeworm",           "\x2\x8\x4\x6\xF\xF\xF", NULL,        Tapeworm_JDR_1999_ch8,                              sizeof(Tapeworm_JDR_1999_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Tetris",             "\x2\x8\x5\x6\x4\x4\x7", NULL,        Tetris_Fran_Dachille_1991_ch8,                      sizeof(Tetris_Fran_Dachille_1991_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "UFO",                "\x5\x8\x4\x6\xc\x1\x2", NULL,        UFO_Lutz_V_1992_ch8,                                sizeof(UFO_Lutz_V_1992_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Wipe Off",           "\x2\x8\x4\x6\xc\x1\x2", NULL,        Wipe_Off_Joseph_Weisbecker_ch8,                     sizeof(Wipe_Off_Joseph_Weisbecker_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "Worm",               "\x2\x8\x4\x6\xc\x1\x2", NULL,        Worm_V4_RB_Revival_Studios_2007_ch8,                sizeof(Worm_V4_RB_Revival_Studios_2007_ch8)},
-//WORKS		{GT_CHIP8,    500,  25, GF_NONE, "X-Mirror",           "\x2\x8\x4\x6\xc\x1\x2", NULL,        X_Mirror_ch8,                                       sizeof(X_Mirror_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Airplane",           "\x8\x8\x8\x8\x8\x8\x8", NULL,        Airplane_ch8,                                       sizeof(Airplane_ch8)},
+//TODO FIXME		{GT_CHIP8,   1000,  25, GF_NONE, "Ant",                "\x1\x1\x3\xC\xA\xA\xA", NULL,        Ant_ch8,                                            sizeof(Ant_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Astro Dodge",  "\x2\x8\x4\x6\x5\x5\x5", NULL,        Astro_Dodge_Revival_Studios_2008_ch8,         sizeof(Astro_Dodge_Revival_Studios_2008_ch8)},
+		{GT_CHIP8,   1000,  25, GF_NONE, "Blinky",             "\x3\x6\x7\x8\xF\xF\xF", NULL,        Blinky_ch8,                                         sizeof(Blinky_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Blitz",              "\x5\x5\x5\x5\x5\x5\x5", NULL,        Blitz_David_Winter_ch8,                             sizeof(Blitz_David_Winter_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Brix",               "\x2\x8\x4\x6\xC\x1\x2", NULL,        Brix_Andreas_Gustafsson_1990_ch8,                   sizeof(Brix_Andreas_Gustafsson_1990_ch8)},
+		{GT_CHIP8,   1000,  25, GF_NONE, "Car",                "\x2\x1\x7\x8\xC\x1\x2", NULL,        Car_ch8,                                            sizeof(Car_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Cave",               "\x2\x8\x4\x6\xF\xF\xF", NULL,        Cave_ch8,                                           sizeof(Cave_ch8)},
+		{GT_CHIP8,   1000,  25, GF_NONE, "Dragon",             "\x2\x8\x4\x6\x5\x5\x5", NULL,        Dragon2_ch8,                                        sizeof(Dragon2_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Filter",             "\x2\x8\x4\x6\xc\x1\x2", NULL,        Filter_ch8,                                         sizeof(Filter_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Hidden",             "\x2\x8\x4\x6\x5\x5\x5", NULL,        Hidden_David_Winter_1996_ch8,                       sizeof(Hidden_David_Winter_1996_ch8)},
+		{GT_CHIP8,   1000,  25, GF_NONE, "Joust",              "\x2\x8\x3\xC\xA\xA\xA", NULL,        Joust23_ch8,                                        sizeof(Joust23_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Landing",            "\x1\x2\x3\x4\x8\x8\x8", NULL,        Landing_ch8,                                        sizeof(Landing_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Mine",               "\x2\x8\x4\x6\x5\x5\x5", NULL,        Mines_ch8,                                          sizeof(Mines_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Piper",              "\x3\x6\x7\x8\xF\x4\x1", NULL,        Piper_ch8,                                          sizeof(Piper_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Pong 1 Player",      "\x1\x4\x5\x5\x5\x5\x5", NULL,        Pong_1_player_ch8,                                  sizeof(Pong_1_player_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Puzzle",             "\x2\x8\x4\x6\xc\x1\x2", NULL,        Puzzle_ch8,                                         sizeof(Puzzle_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Race",               "\x1\x1\x7\x8\xC\x1\x2", NULL,        Race_ch8,                                           sizeof(Race_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Rocket Launch",      "\x2\x8\x4\x6\xB\xB\xB", NULL,        Rocket_Launch_Jonas_Lindstedt_ch8,                  sizeof(Rocket_Launch_Jonas_Lindstedt_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Space Flight",       "\x1\x4\x2\x2\xF\xE\xF", NULL,        Space_Flight_ch8,                                   sizeof(Space_Flight_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Space Invaders",     "\x2\x8\x4\x6\x5\x5\x5", NULL,        Space_Invaders_David_Winter_ch8,                    sizeof(Space_Invaders_David_Winter_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Squash",             "\x1\x4\x5\x5\x5\x5\x5", NULL,        Squash_David_Winter_ch8,                            sizeof(Squash_David_Winter_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Submarine",          "\x2\x8\x4\x6\x5\x5\x5", NULL,        Submarine_Carmelo_Cortez_1978_ch8,                  sizeof(Submarine_Carmelo_Cortez_1978_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Syzygy",             "\x3\x6\x7\x8\xF\xF\xF", NULL,        Syzygy_Roy_Trevino_1990_ch8,                        sizeof(Syzygy_Roy_Trevino_1990_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Tapeworm",           "\x2\x8\x4\x6\xF\xF\xF", NULL,        Tapeworm_JDR_1999_ch8,                              sizeof(Tapeworm_JDR_1999_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Tetris",             "\x2\x8\x5\x6\x4\x4\x7", NULL,        Tetris_Fran_Dachille_1991_ch8,                      sizeof(Tetris_Fran_Dachille_1991_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "UFO",                "\x5\x8\x4\x6\xc\x1\x2", NULL,        UFO_Lutz_V_1992_ch8,                                sizeof(UFO_Lutz_V_1992_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Wipe Off",           "\x2\x8\x4\x6\xc\x1\x2", NULL,        Wipe_Off_Joseph_Weisbecker_ch8,                     sizeof(Wipe_Off_Joseph_Weisbecker_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "Worm",               "\x2\x8\x4\x6\xc\x1\x2", NULL,        Worm_V4_RB_Revival_Studios_2007_ch8,                sizeof(Worm_V4_RB_Revival_Studios_2007_ch8)},
+		{GT_CHIP8,    500,  25, GF_NONE, "X-Mirror",           "\x2\x8\x4\x6\xc\x1\x2", NULL,        X_Mirror_ch8,                                       sizeof(X_Mirror_ch8)},
 		{GT_EOL,        0,   0, NULL,                 NULL,                   NULL,         NULL,        0}
 };
 

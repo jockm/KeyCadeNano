@@ -389,10 +389,6 @@ inline bool Chip8::doScrollDown(uint8_t n)
 		return true;
 	}
 
-	if(!this->enhancedMode) {
-		n *= 2;
-	}
-
 	this->screen->scrollDown(n);
 
 	return true;
@@ -423,13 +419,15 @@ inline bool Chip8::doRet()
 // 00FB*    Scroll display 4 pixels right
 inline bool Chip8::doScrollRight()
 {
-	uint8_t n = 4;
+	uint8_t n = 2;
 
-	if(!this->enhancedMode) {
+	if(this->enhancedMode) {
 		n *= 2;
 	}
 
-	this->screen->scrollRight(n);
+	for(uint8_t i = 0; i < n; ++i) {
+		this->screen->scrollRight(1);
+	}
 
 	return true;
 }
@@ -438,13 +436,15 @@ inline bool Chip8::doScrollRight()
 // 00FC*    Scroll display 4 pixels left
 inline bool Chip8::doScrollLeft()
 {
-	uint8_t n = 4;
+	uint8_t n = 2;
 
-	if(!this->enhancedMode) {
+	if(this->enhancedMode) {
 		n *= 2;
 	}
 
-	this->screen->scrollRight(n);
+	for(uint8_t i = 0; i < n; ++i) {
+		this->screen->scrollLeft(1);
+	}
 
 	return true;
 }
@@ -653,13 +653,13 @@ inline bool Chip8::doSkipNeqVar(uint8_t x, uint8_t y)
 }
 
 
-// ANNN     I := NNN
-inline bool Chip8::doLoadIndex(uint16_t nnn)
-{
-	this->vI = nnn;
-
-	return true;
-}
+//// ANNN     I := NNN
+//inline bool Chip8::doLoadIndex(uint16_t nnn)
+//{
+//	this->vI = nnn;
+//
+//	return true;
+//}
 
 
 // BNNN     Jump to NNN+V0

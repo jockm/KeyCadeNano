@@ -199,7 +199,7 @@ uint8_t pickGame(void)
 }
 
 
-
+static uint8_t duck = 5;
 void runGame(uint8_t gameIdx)
 {
 	bool done = false;
@@ -243,7 +243,8 @@ void runGame(uint8_t gameIdx)
 					break;
 				}
 
-				gameEngine->runOne(key);
+				gameEngine->runOne(duck-- == 0 ? key : 0xFF); duck = duck == 0 ? 5 : duck;
+//				gameEngine->runOne(key);
 			}
 
 			//TODO make this async?
@@ -258,7 +259,7 @@ void runGame(uint8_t gameIdx)
 
 int main()
 {
-	i2c.frequency(400000);
+ 	i2c.frequency(400000);
 
 	display.setScreenFlipped(true);
 

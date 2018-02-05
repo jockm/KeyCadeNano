@@ -23,15 +23,41 @@
 				memcpy(mem, prog, progSize);
 			}
 
-			virtual void init(uint8_t *prog, uint16_t memSize, Screen *screen) = 0;
+			virtual void init(uint8_t *prog, uint16_t memSize, uint16_t startAddr, Screen *screen) = 0;
 			virtual bool runOne(uint8_t keyPressed) = 0;
-			virtual void intervalCallback(void) {};
 
-			static NanoGameEngine *getGameEngine(uint8_t type)
-			{
-				// TODO should we move this?, and
-				return NULL;
+			virtual void intervalCallback(void) {
+				if(this->delayCounter > 0) {
+					--this->delayCounter;
+				}
+
+				if(this->soundCounter > 0) {
+					--this->soundCounter;
+				}
+			};
+
+			volatile uint8_t getDelayCounter() const {
+				return delayCounter;
 			}
+
+			void setDelayCounter(volatile uint8_t delayCounter) {
+				this->delayCounter = delayCounter;
+			}
+
+			volatile uint8_t getSoundCounter() const {
+				return soundCounter;
+			}
+
+			void setSoundCounter(volatile uint8_t soundCounter) {
+				this->soundCounter = soundCounter;
+			}
+
+		protected:
+			Screen *screen;
+
+			volatile uint8_t   delayCounter;
+			volatile uint8_t   soundCounter;
+
 	};
 
 #endif /* NANOGAMEENGINE_H_ */

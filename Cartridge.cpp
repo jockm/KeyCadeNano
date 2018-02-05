@@ -13,6 +13,6 @@ Cartridge::Cartridge(I2C *i2c) {
 }
 
 Cartridge::~Cartridge() {
-	// TODO Auto-generated destructor stub
+	// Nothing
 }
 

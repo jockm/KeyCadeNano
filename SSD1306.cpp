@@ -79,7 +79,7 @@ void SSD1306::initDisplay()
 	this->sendCommand(SSD1306_COMSCANDEC);
 
 	this->sendCommand(SSD1306_SETCOMPINS);
-	this->sendCommand(this->displayHeight == 32 ? 0x02 : 0x12);        // TODO - calculate based on _rawHieght ?
+	this->sendCommand(this->displayHeight == 32 ? 0x02 : 0x12);
 
 	this->sendCommand(SSD1306_SETCONTRAST);
 	this->sendCommand(this->displayHeight == 32 ? 0x8F : ((vccState == SSD1306_EXTERNALVCC) ? 0x9F : 0xCF) );
@@ -318,7 +318,6 @@ void SSD1306::scrollRight(uint8_t n)
 	uint8_t sourceX = targetX - n;
 	uint8_t colCount = this->displayWidth - n;
 
-	// todo implement me
 	for(uint8_t i = 0; i < colCount; ++i) {
 		for(uint8_t y = 0; y < this->displayHeight; ++y) {
 			uint8_t c = this->getPixel(sourceX, y);
@@ -329,19 +328,6 @@ void SSD1306::scrollRight(uint8_t n)
 		--targetX;
 	}
 
-
-//	sourceX = this->displayWidth - n * 4;
-//	targetX = this->displayWidth - n;
-//
-//	for(uint8_t x = this->displayWidth - n; x < this->displayWidth; ++x) {
-//		for(uint8_t y = 0; y < this->displayHeight; ++y) {
-//			uint8_t c = this->getPixel(sourceX, y);
-//			this->drawPixel(targetX, y, c);
-//		}
-//
-//		++sourceX;
-//		++targetX;
-//	}
 
 	for(uint8_t x = 0; x < n; ++x) {
 		for(uint8_t y = 0; y < this->displayHeight; ++y) {

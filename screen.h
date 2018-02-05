@@ -15,6 +15,7 @@ class Screen {
 		virtual ~Screen() {};
 
 		virtual void update() = 0;
+		virtual void updateAsync() = 0;
 		virtual void drawBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h) = 0;
 		virtual void xorBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h) = 0;
 		virtual void drawChar(uint8_t x, uint8_t y, const char ch) = 0;

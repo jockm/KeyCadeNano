@@ -48,7 +48,7 @@ const uint8_t chip8Font[] = {
 };
 
 
-void Chip8::init(uint8_t *mem, uint16_t memSize, Screen *screen)
+void Chip8::init(uint8_t *prog, uint16_t memSize, uint16_t startAddr, Screen *screen)
 {
 	srand(us_ticker_read());
 
@@ -58,7 +58,7 @@ void Chip8::init(uint8_t *mem, uint16_t memSize, Screen *screen)
 
 	memcpy(this->mem, chip8Font, sizeof(chip8Font));
 
-	pc = 0x200;
+	pc = startAddr;
 	sp = 0;
 
 	this->delayCounter = 0;

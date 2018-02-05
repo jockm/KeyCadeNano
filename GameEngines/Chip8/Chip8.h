@@ -30,6 +30,9 @@
 				this->keyDest = 0;
 				this->screenDirty = false;
 				this->screen = NULL;
+
+				this->setDelayCounter(0);
+
 			}
 
 
@@ -37,7 +40,7 @@
 				memcpy(mem + 0x200, prog, progSize);
 			}
 
-			void init(uint8_t *prog, uint16_t memSize, Screen *screen);
+			void init(uint8_t *prog, uint16_t memSize, uint16_t startAddr, Screen *screen);
 
 			bool runOne(uint8_t keyPressed);
 
@@ -146,8 +149,8 @@
 			uint16_t   pc;
 			uint16_t   vI;
 
-			volatile uint8_t   delayCounter;
-			volatile uint8_t   soundCounter;
+//			volatile uint8_t   delayCounter;
+//			volatile uint8_t   soundCounter;
 
 			uint16_t  stack[20];
 			uint8_t   v[16];

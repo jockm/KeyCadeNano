@@ -11,23 +11,25 @@
 #	include "mbed.h"
 
 	enum GameType {
-		GT_CHIP8 = 0,
-		GT_EOL = 0xFF
+		GT_CHIP8	= 0,
+		GT_EMBEDVM	= 1,
+		GT_EOL		= 0xFF
 	};
 
 	enum GameFlags {
 		GF_NONE = 0,
-		GF_NOYWRAP = 0b0000000000000000,
+		GF_NOTWRAP = 0b0000000000000000,
 	};
 
 	typedef struct {
-		uint8_t       type;
+		GameType       type;
 		uint16_t       instructionsPerSecond;
 		uint16_t       framesPerSecond;
 		uint16_t       flags;
 		const char    *name;
 		const char    *keyMap;
 		const char    *instuctions;
+		uint16_t       codeStart;
 		const uint8_t *data;
 		uint16_t       size;
 	} GameData;

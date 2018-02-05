@@ -4,7 +4,7 @@
 #include "GameData.h"
 #include "games.h"
 #include "NanoGameEngine.h"
-#include "Chip8.h"
+#include "GameEngineFactory.h"
 
 
 #define _MAX(a,b) ((a)<(b))?(b):(a)
@@ -199,7 +199,6 @@ uint8_t pickGame(void)
 }
 
 
-static uint8_t duck = 5;
 void runGame(uint8_t gameIdx)
 {
 	bool done = false;
@@ -211,10 +210,9 @@ void runGame(uint8_t gameIdx)
 
 	currGame = &games[gameIdx];
 
-	//TODO use factory method to create game engine
-	gameEngine = (NanoGameEngine *)new Chip8();
+	gameEngine = GameEngineFactory::getEngine(currGame->type);
 	gameEngine->loadMemory(mem, currGame->data, currGame->size);
-	gameEngine->init(mem, sizeof(mem), &display);
+	gameEngine->init(mem, sizeof(mem), currGame->codeStart, &display);
 
 	uint32_t nextFrameTime = 0;
 	uint32_t nextDecrementTime = 0;
@@ -243,12 +241,11 @@ void runGame(uint8_t gameIdx)
 					break;
 				}
 
-				gameEngine->runOne(duck-- == 0 ? key : 0xFF); duck = duck == 0 ? 5 : duck;
-//				gameEngine->runOne(key);
+				gameEngine->runOne(key);
 			}
 
 			//TODO make this async?
-			display.update();
+			display.updateAsync();
 			nextFrameTime = currTime + microsconstPerFrame;
 		}
 	}

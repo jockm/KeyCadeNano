@@ -367,7 +367,6 @@ void SSD1306::scrollDown(uint8_t n)
 	uint8_t sourceY = targetY - n;
 	uint8_t rowCount = this->displayHeight - n;
 
-	// todo implement me
 	for(uint8_t i = 0; i < rowCount; ++i) {
 		for(uint8_t x = 0; x < this->displayWidth; ++x) {
 			uint8_t c = this->getPixel(x, sourceY);

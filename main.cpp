@@ -244,7 +244,6 @@ void runGame(uint8_t gameIdx)
 				gameEngine->runOne(key);
 			}
 
-			//TODO make this async?
 			display.updateAsync();
 			nextFrameTime = currTime + microsconstPerFrame;
 		}

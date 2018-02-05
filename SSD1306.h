@@ -37,10 +37,10 @@
 			void xorBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h);
 			void drawChar(uint8_t x, uint8_t y, const char ch);
 
-			void scrollLeft(uint8_t n);
-			void scrollRight(uint8_t n);
-			void scrollUp(uint8_t n);
-			void scrollDown(uint8_t n);
+			void scrollLeft(uint8_t n, uint8_t from = 0, uint8_t to = SSD1306_MAX_WIDTH);
+			void scrollRight(uint8_t n, uint8_t from = 0, uint8_t to = SSD1306_MAX_WIDTH);
+			void scrollUp(uint8_t n, uint8_t from = 0, uint8_t to = SSD1306_MAX_HEIGHT);
+			void scrollDown(uint8_t n, uint8_t from = 0, uint8_t to = SSD1306_MAX_HEIGHT);
 
 
 			inline void drawRawPixel(uint8_t x, uint8_t y, uint8_t color)

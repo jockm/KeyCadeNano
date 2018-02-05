@@ -274,7 +274,7 @@ void SSD1306::drawChar(uint8_t x, uint8_t y, const char ch)
 	}
 }
 
-void SSD1306::scrollLeft(uint8_t n)
+void SSD1306::scrollLeft(uint8_t n, uint8_t from, uint8_t to)
 {
 	uint8_t targetX = 0;
 	uint8_t sourceX = targetX + n;
@@ -312,7 +312,7 @@ void SSD1306::scrollLeft(uint8_t n)
 }
 
 
-void SSD1306::scrollRight(uint8_t n)
+void SSD1306::scrollRight(uint8_t n, uint8_t from, uint8_t to)
 {
 	uint8_t targetX = this->displayWidth - 1;
 	uint8_t sourceX = targetX - n;
@@ -337,7 +337,7 @@ void SSD1306::scrollRight(uint8_t n)
 }
 
 
-void SSD1306::scrollUp(uint8_t n)
+void SSD1306::scrollUp(uint8_t n, uint8_t from, uint8_t to)
 {
 	uint8_t targetY = 0;
 	uint8_t sourceY = targetY + n;
@@ -361,7 +361,7 @@ void SSD1306::scrollUp(uint8_t n)
 }
 
 
-void SSD1306::scrollDown(uint8_t n)
+void SSD1306::scrollDown(uint8_t n, uint8_t from, uint8_t to)
 {
 	uint8_t targetY = this->displayHeight - 1;
 	uint8_t sourceY = targetY - n;

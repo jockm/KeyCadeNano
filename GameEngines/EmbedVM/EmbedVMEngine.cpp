@@ -43,7 +43,7 @@ EmbedVMEngine::EmbedVMEngine() {
 }
 
 EmbedVMEngine::~EmbedVMEngine() {
-	// TODO Auto-generated destructor stub
+	// Nothing
 }
 
 

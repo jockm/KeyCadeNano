@@ -261,7 +261,7 @@ void SSD1306::xorBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_
 }
 
 
-void SSD1306::drawChar(uint8_t x, uint8_t y, const char ch)
+void SSD1306::drawChar(uint8_t x, uint8_t y, const char ch, uint8_t color)
 {
 	const uint8_t *fontChar = font + ((uint16_t) ch * 5);
 
@@ -269,7 +269,7 @@ void SSD1306::drawChar(uint8_t x, uint8_t y, const char ch)
 		for(uint8_t yOffset = 0; yOffset < 7; ++yOffset) {
 			uint8_t pixel = (fontChar[xOffset] >> yOffset) & 1;
 
-			this->drawPixel(x + xOffset, y + yOffset, pixel);
+			this->drawPixel(x + xOffset, y + yOffset, color ? pixel : !pixel);
 		}
 	}
 }

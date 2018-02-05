@@ -140,6 +140,18 @@ class EmbedVMEngine: public NanoGameEngine {
 		}
 
 
+		int16_t ufDrawString(uint8_t argc, int16_t *argv)
+		{
+			uint8_t  x = argv[0];
+			uint8_t  y = argv[1];
+			uint8_t  c = argv[2];
+			uint8_t *s = (uint8_t *)argv[3];
+
+			this->screen->drawString(x, y, (const char *) s, c);
+
+			return 0;
+		}
+
 		int16_t ufClearScreen(uint8_t argc, int16_t *argv)
 		{
 			this->screen->clearScreen();

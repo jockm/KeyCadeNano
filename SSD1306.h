@@ -15,7 +15,7 @@
 //#define SSD1306_TRANSFRER_SYNC_CHUNK
 
 
-	class SSD1306 : public Screen {
+	class  SSD1306 : public Screen {
 		public:
 			SSD1306(I2C *i2cPort, uint8_t addr = 0x78, uint8_t width = SSD1306_MAX_WIDTH, uint8_t height = SSD1306_MAX_HEIGHT)
 			{
@@ -35,7 +35,7 @@
 
 			void drawBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h);
 			void xorBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h);
-			void drawChar(uint8_t x, uint8_t y, const char ch);
+			void drawChar(uint8_t x, uint8_t y, const char ch, uint8_t color = 1);
 
 			void scrollLeft(uint8_t n, uint8_t from = 0, uint8_t to = SSD1306_MAX_WIDTH);
 			void scrollRight(uint8_t n, uint8_t from = 0, uint8_t to = SSD1306_MAX_WIDTH);
@@ -138,7 +138,7 @@
 			};
 
 
-			void drawString(uint8_t x, uint8_t y, const char *str)
+			void drawString(uint8_t x, uint8_t y, const char *str, uint8_t c = 1)
 			{
 				uint16_t xPos = x;
 				for(uint16_t i = 0; i < strlen(str); ++i) {
@@ -149,7 +149,7 @@
 						continue;
 					}
 
-					this->drawChar(xPos, y, str[i]);
+					this->drawChar(xPos, y, str[i], 1);
 
 					xPos += 6;
 				}

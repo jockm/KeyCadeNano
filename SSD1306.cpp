@@ -274,14 +274,14 @@ void SSD1306::drawChar(uint8_t x, uint8_t y, const char ch, uint8_t color)
 	}
 }
 
-void SSD1306::scrollLeft(uint8_t n, uint8_t from, uint8_t to)
+void SSD1306::scrollLeft(uint8_t n, uint8_t fromY, uint8_t toY)
 {
 	uint8_t targetX = 0;
 	uint8_t sourceX = targetX + n;
 	uint8_t colCount = this->displayWidth - n;
 
 	for(uint8_t i = 0; i < colCount; ++i) {
-		for(uint8_t y = 0; y < this->displayHeight; ++y) {
+		for(uint8_t y = fromY; y < toY; ++y) {
 			uint8_t c = this->getPixel(sourceX, y);
 			this->drawPixel(targetX, y, c);
 		}
@@ -291,35 +291,22 @@ void SSD1306::scrollLeft(uint8_t n, uint8_t from, uint8_t to)
 	}
 
 
-//	sourceX = this->displayWidth - n * 4;
-//	targetX = this->displayWidth - n;
-//
-//	for(uint8_t x = this->displayWidth - n; x < this->displayWidth; ++x) {
-//		for(uint8_t y = 0; y < this->displayHeight; ++y) {
-//			uint8_t c = this->getPixel(sourceX, y);
-//			this->drawPixel(targetX, y, c);
-//		}
-//
-//		++sourceX;
-//		++targetX;
-//	}
-
-		for(uint8_t x = this->displayWidth - n; x < this->displayWidth; ++x) {
-			for(uint8_t y = 0; y < this->displayHeight; ++y) {
-				this->drawPixel(x, y, 0);
-			}
+	for(uint8_t x = this->displayWidth - n; x < this->displayWidth; ++x) {
+		for(uint8_t y = fromY; y < toY; ++y) {
+			this->drawPixel(x, y, 0);
 		}
+	}
 }
 
 
-void SSD1306::scrollRight(uint8_t n, uint8_t from, uint8_t to)
+void SSD1306::scrollRight(uint8_t n, uint8_t fromY, uint8_t toY)
 {
 	uint8_t targetX = this->displayWidth - 1;
 	uint8_t sourceX = targetX - n;
 	uint8_t colCount = this->displayWidth - n;
 
 	for(uint8_t i = 0; i < colCount; ++i) {
-		for(uint8_t y = 0; y < this->displayHeight; ++y) {
+		for(uint8_t y = fromY; y < toY; ++y) {
 			uint8_t c = this->getPixel(sourceX, y);
 			this->drawPixel(targetX, y, c);
 		}
@@ -330,14 +317,14 @@ void SSD1306::scrollRight(uint8_t n, uint8_t from, uint8_t to)
 
 
 	for(uint8_t x = 0; x < n; ++x) {
-		for(uint8_t y = 0; y < this->displayHeight; ++y) {
+		for(uint8_t y = fromY; y < toY; ++y) {
 			this->drawPixel(x, y, 0);
 		}
 	}
 }
 
 
-void SSD1306::scrollUp(uint8_t n, uint8_t from, uint8_t to)
+void SSD1306::scrollUp(uint8_t n, uint8_t fromX, uint8_t toX)
 {
 	uint8_t targetY = 0;
 	uint8_t sourceY = targetY + n;
@@ -353,15 +340,15 @@ void SSD1306::scrollUp(uint8_t n, uint8_t from, uint8_t to)
 		++targetY;
 	}
 
-	for(uint8_t y = 0; y < n; ++y) {
-		for(uint8_t x = 0; x < this->displayWidth; ++x) {
+	for(uint8_t y = this->displayHeight - n; y < this->displayHeight; ++y) {
+		for(uint8_t x = fromX; x < toX; ++x) {
 			this->drawPixel(x, y, 0);
 		}
 	}
 }
 
 
-void SSD1306::scrollDown(uint8_t n, uint8_t from, uint8_t to)
+void SSD1306::scrollDown(uint8_t n, uint8_t fromX, uint8_t toX)
 {
 	uint8_t targetY = this->displayHeight - 1;
 	uint8_t sourceY = targetY - n;
@@ -378,7 +365,7 @@ void SSD1306::scrollDown(uint8_t n, uint8_t from, uint8_t to)
 	}
 
 	for(uint8_t y = 0; y < n; ++y) {
-		for(uint8_t x = 0; x < this->displayWidth; ++x) {
+		for(uint8_t x = fromX; x < toX; ++x) {
 			this->drawPixel(x, y, 0);
 		}
 	}

@@ -9,6 +9,7 @@
 
 #include "GameEngines/Chip8/Chip8.h"
 #include "GameEngines/EmbedVM/EmbedVMEngine.h"
+#include "GameEngines/UBasic/UBasicGameEngine.h"
 
 GameEngineFactory::GameEngineFactory() {
 	// Nothing
@@ -30,6 +31,10 @@ NanoGameEngine *GameEngineFactory::getEngine(GameType type)
 			break;
 
 		case GT_EMBEDVM:
+			ret = (NanoGameEngine *)new EmbedVMEngine();
+			break;
+
+		case GT_UBASIC:
 			ret = (NanoGameEngine *)new EmbedVMEngine();
 			break;
 

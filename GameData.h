@@ -13,12 +13,12 @@
 	enum GameType {
 		GT_CHIP8	= 0,
 		GT_EMBEDVM	= 1,
+		GT_UBASIC	= 2,
 		GT_EOL		= 0xFF
 	};
 
 	enum GameFlags {
 		GF_NONE = 0,
-		GF_NOTWRAP = 0b0000000000000000,
 	};
 
 	typedef struct {

@@ -65,6 +65,22 @@
 			uint8_t    *mem;
 			uint16_t    memSize;
 			ubasic_info ubInfo;
+
+			bool        seenCmd;
+			bool        seenX;
+			bool        seenY;
+			bool        seenW;
+			bool        seenH;
+			bool        collectingBody;
+
+			uint8_t     x;
+			uint8_t     y;
+			uint8_t     w;
+			uint8_t     h;
+			const char *cmd[11];
+
+			uint8_t     buf[101];
+			uint8_t     bufPos;
 	};
 
 #endif /* GAMEENGINES_UBASIC_UBASICGAMEENGINE_H_ */

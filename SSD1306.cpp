@@ -151,7 +151,7 @@ void SSD1306::initDisplay()
 
 void SSD1306::transferCallback(int foo)
 {
-
+	this->transferInProgress = false;
 }
 
 
@@ -183,6 +183,11 @@ void SSD1306::update()
 
 void SSD1306::updateAsync()
 {
+	// Abord if a transfer is already happening
+	if(this->transferInProgress) {
+		return;
+	}
+
 	this->sendCommand(SSD1306_COLUMNADDR);
 	this->sendCommand(0);   // Column start address (0 = reset)
 	this->sendCommand(this->displayWidth - 1); // Column end address (127 = reset)
@@ -205,6 +210,7 @@ void SSD1306::updateAsync()
 	event_callback_t callbackEvent;
 	callbackEvent.attach(this, &SSD1306::transferCallback);
 
+	this->transferInProgress = true;
 	memcpy(transferBuffer + 1, this->displayBuffer, sizeof(this->displayBuffer));
 	this->i2c->transfer(this->i2cAddr, (const char *) transferBuffer, sizeof(this->displayBuffer) + 1, (char *)transferResponseBuffer, sizeof(transferResponseBuffer), callbackEvent);
 }

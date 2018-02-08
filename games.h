@@ -21,7 +21,6 @@
 #include "Games/Blitz_David_Winter.h"
 #include "Games/Brix_Andreas_Gustafsson_1990.h"
 #include "Games/Car.h"
-#include "Games/Cave.h"
 #include "Games/Dragon2.h"
 #include "Games/Filter.h"
 #include "Games/Hidden_David_Winter_1996.h"
@@ -57,7 +56,6 @@ const GameData games[] = {
 		{GT_CHIP8,    500,  25, GF_NONE, "Blitz",              "\x5\x5\x5\x5\x5\x5\x5", NULL,        0x0200, Blitz_David_Winter_ch8,                             sizeof(Blitz_David_Winter_ch8)},
 		{GT_CHIP8,    500,  25, GF_NONE, "Brix",               "\x2\x8\x4\x6\xC\x1\x2", NULL,        0x0200, Brix_Andreas_Gustafsson_1990_ch8,                   sizeof(Brix_Andreas_Gustafsson_1990_ch8)},
 		{GT_CHIP8,   1000,  25, GF_NONE, "Car",                "\x2\x1\x7\x8\xC\x1\x2", NULL,        0x0200, Car_ch8,                                            sizeof(Car_ch8)},
-		{GT_CHIP8,    500,  25, GF_NONE, "Cave",               "\x2\x8\x4\x6\xF\xF\xF", NULL,        0x0200, Cave_ch8,                                           sizeof(Cave_ch8)},
 		{GT_CHIP8,   1000,  25, GF_NONE, "Dragon",             "\x2\x8\x4\x6\x5\x5\x5", NULL,        0x0200, Dragon2_ch8,                                        sizeof(Dragon2_ch8)},
 		{GT_CHIP8,    500,  25, GF_NONE, "Filter",             "\x2\x8\x4\x6\xc\x1\x2", NULL,        0x0200, Filter_ch8,                                         sizeof(Filter_ch8)},
 		{GT_CHIP8,    500,  25, GF_NONE, "Hidden",             "\x2\x8\x4\x6\x5\x5\x5", NULL,        0x0200, Hidden_David_Winter_1996_ch8,                       sizeof(Hidden_David_Winter_1996_ch8)},

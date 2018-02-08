@@ -33,10 +33,10 @@ class Screen {
 		virtual uint8_t getPixel(uint8_t x, uint8_t y) = 0;
 		virtual void fillScreen(uint8_t color) = 0;
 		virtual void clearScreen() = 0;
-		virtual void scrollLeft(uint8_t n, uint8_t from = 0, uint8_t to = SCREEN_MAX_WIDTH) = 0; // TODO fix signature
-		virtual void scrollRight(uint8_t n, uint8_t from = 0, uint8_t to = SCREEN_MAX_WIDTH) = 0; // TODO fix signature
-		virtual void scrollUp(uint8_t n, uint8_t from = 0, uint8_t to = SCREEN_MAX_HEIGHT) = 0; // TODO fix signature
-		virtual void scrollDown(uint8_t n, uint8_t from = 0, uint8_t to = SCREEN_MAX_HEIGHT) = 0; // TODO fix signature
+		virtual void scrollLeft(uint8_t n, uint8_t from = 0, uint8_t to = SCREEN_MAX_WIDTH) = 0;
+		virtual void scrollRight(uint8_t n, uint8_t from = 0, uint8_t to = SCREEN_MAX_WIDTH) = 0;
+		virtual void scrollUp(uint8_t n, uint8_t from = 0, uint8_t to = SCREEN_MAX_HEIGHT) = 0;
+		virtual void scrollDown(uint8_t n, uint8_t from = 0, uint8_t to = SCREEN_MAX_HEIGHT) = 0;
 		virtual void drawString(uint8_t x, uint8_t y, const char *str, uint8_t color = SCREEN_WHITE) = 0;
 };
 

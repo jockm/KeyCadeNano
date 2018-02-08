@@ -77,7 +77,7 @@
 			uint8_t     y;
 			uint8_t     w;
 			uint8_t     h;
-			const char *cmd[11];
+			char        cmd[11];
 
 			uint8_t     buf[101];
 			uint8_t     bufPos;

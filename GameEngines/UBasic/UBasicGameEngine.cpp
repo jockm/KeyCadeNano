@@ -198,7 +198,7 @@ void UBasicGameEngine::userFuncNum(int16_t v)
 
 	if(this->collectingBody) {
 		if(this->bufPos < sizeof(this->buf)) {
-			*(this->bufPos++) = (uint8_t) v;
+			this->buf[this->bufPos++] = (uint8_t) v;
 		}
 	}
 }

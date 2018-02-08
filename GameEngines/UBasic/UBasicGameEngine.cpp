@@ -1,4 +1,5 @@
 /*
+#include <b64.h>
  * UBasicGameEngine.cpp
  *
  *  Created on: Feb 7, 2018
@@ -7,6 +8,7 @@
 
 #include <GameEngines/UBasic/UBasicGameEngine.h>
 #include "ubasic/vartype.h"
+#include "b64.h"
 
 
 static void userBegin(void *context)
@@ -208,7 +210,9 @@ void UBasicGameEngine::userFuncString(const char *s)
 {
 	if(this->seenCmd) {
 		this->collectingBody = true;
-		//TODO Implement string to binary
+
+		uint16_t bytesAdded = b64Decode((uint8_t *)s, this->buf + this->bufPos, strlen(s));
+		this->bufPos += bytesAdded;
 	} else {
 		strcpy(this->cmd, s);
 		seenCmd = true;

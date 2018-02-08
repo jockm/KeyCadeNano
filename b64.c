@@ -1,4 +1,5 @@
 /*********************************************************************
+#include <b64.h>
 * Filename:   base64.c
 * Author:     Brad Conte (brad AT bradconte.com)
 * Copyright:
@@ -7,8 +8,8 @@
 *********************************************************************/
 
 /*************************** HEADER FILES ***************************/
-#include <stdlib.h>
-#include "base64.h"
+#include <stddef.h>
+#include "b64.h"
 
 /****************************** MACROS ******************************/
 #define NEWLINE_INVL 76
@@ -18,7 +19,7 @@
 static const uint8_t charset[]={"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"};
 
 /*********************** FUNCTION DEFINITIONS ***********************/
-uint8_t revchar(char ch)
+static uint8_t revchar(char ch)
 {
 	if (ch >= 'A' && ch <= 'Z')
 		ch -= 'A';
@@ -34,9 +35,9 @@ uint8_t revchar(char ch)
 	return(ch);
 }
 
-size_t base64_encode(const uint8_t in[], uint8_t out[], size_t len, int newline_flag)
+uint16_t b64Encode(const uint8_t in[], uint8_t out[], uint16_t len, int newline_flag)
 {
-	size_t idx, idx2, blks, blk_ceiling, left_over, newline_count = 0;
+	uint16_t idx, idx2, blks, blk_ceiling, left_over, newline_count = 0;
 
 	blks = (len / 3);
 	left_over = len % 3;
@@ -85,10 +86,10 @@ size_t base64_encode(const uint8_t in[], uint8_t out[], size_t len, int newline_
 	return(idx2);
 }
 
-size_t base64_decode(const uint8_t in[], uint8_t out[], size_t len)
+uint16_t b64Decode(const uint8_t in[], uint8_t out[], uint16_t len)
 {
 	uint8_t ch;
-	size_t idx, idx2, blks, blk_ceiling, left_over;
+	uint16_t idx, idx2, blks, blk_ceiling, left_over;
 
 	if (in[len - 1] == '=')
 		len--;

@@ -147,25 +147,86 @@ void UBasicGameEngine::init(uint8_t *prog, uint16_t memSiz, uint16_t startAddr, 
 
 void UBasicGameEngine::userFuncBegin()
 {
-	//TODO Implement Me
+	this->seenCmd = false;
+	this->seenX = false;
+	this->seenY = false;
+	this->seenW = false;
+	this->seenH = false;
+	this->collectingBody = false;
+
+	this->x = 0;
+	this->y = 0;
+	this->w = 0;
+	this->h = 0;
+	this->cmd[0] = '\0';
+	this->buf[0] = '\0';
+	this->bufPos = 0;
 }
 
 
 void UBasicGameEngine::userFuncNum(int16_t v)
 {
-	//TODO Implement Me
+	if(!seenX) {
+		this->x = v;
+		this->seenX = true;
+
+		return;
+	}
+
+	if(!seenY) {
+		this->y = v;
+		this->seenY = true;
+
+		return;
+	}
+
+	if(!seenW) {
+		this->w = v;
+		this->seenW = true;
+
+		return;
+	}
+
+	if(!seenH) {
+		this->h = v;
+		this->seenH = true;
+
+		this->collectingBody = true;
+
+		return;
+	}
+
+	if(this->collectingBody) {
+		if(this->bufPos < sizeof(this->buf)) {
+			*(this->bufPos++) = (uint8_t) v;
+		}
+	}
 }
 
 
 void UBasicGameEngine::userFuncString(const char *s)
 {
-	//TODO Implement Me
+	if(this->seenCmd) {
+		this->collectingBody = true;
+		//TODO Implement string to binary
+	} else {
+		strcpy(this->cmd, s);
+		seenCmd = true;
+	}
 }
 
 
 void UBasicGameEngine::userFuncEnd()
 {
-	//TODO Implement Me
+	if(strcmp("cls", (const char *)this->buf) == 0) {
+		this->screen->fillScreen(this->x);
+	} else if(strcmp("update", (const char *)this->buf) == 0) {
+		this->screen->update();
+	} else if(strcmp("draw", (const char *)this->buf) == 0) {
+		this->screen->drawBitmap(this->x, this->y, this->buf, this->w, this->h);
+	} else if(strcmp("xdraw", (const char *)this->buf) == 0) {
+		this->screen->xorBitmap(this->x, this->y, this->buf, this->w, this->h);
+	}
 }
 
 

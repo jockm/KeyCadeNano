@@ -39,8 +39,8 @@ DigitalIn action2(PA_8, PullUp);
 
 //PwmOut    speaker(PA_1);
 //AnalogOut    speakerDac(PA_4);
-//PwmOut    speaker(PA_1);
-//AnalogOut    speakerDac(PA_4);
+PwmOut    speaker(PA_1);
+AnalogOut    speakerDac(PA_4);
 
 
 uint8_t   gameCount;
@@ -217,10 +217,11 @@ void runGame(uint8_t gameIdx)
 	uint32_t nextFrameTime = 0;
 	uint32_t nextDecrementTime = 0;
 
-//	intervalTicker.attach_us(Callback<void()>(gameEngine, &NanoGameEngine::intervalCallback), 16666);
+	bool freeRunning = currGame->framesPerSecond == 0 || currGame->instructionsPerSecond;
 
 	const int microsconstPerFrame = 1000000 / currGame->framesPerSecond;
-	const int instructionsPerFrame = currGame->instructionsPerSecond / currGame->framesPerSecond;
+	const int instructionsPerFrame = freeRunning ? 1 : currGame->instructionsPerSecond / currGame->framesPerSecond;
+
 
 	while(!done) {
 		uint32_t currTime = us_ticker_read();
@@ -241,13 +242,16 @@ void runGame(uint8_t gameIdx)
 					break;
 				}
 
-				gameEngine->runOne(key);
+				done = !gameEngine->runOne(key);
 			}
 
-			display.updateAsync();
-			nextFrameTime = currTime + microsconstPerFrame;
+			if(!freeRunning) {
+				display.updateAsync();
+				nextFrameTime = currTime + microsconstPerFrame;
+			}
 		}
 	}
+
 
 	delete gameEngine;
 }
@@ -255,7 +259,7 @@ void runGame(uint8_t gameIdx)
 
 int main()
 {
- 	i2c.frequency(400000);
+	i2c.frequency(400000);
 
 	display.setScreenFlipped(true);
 

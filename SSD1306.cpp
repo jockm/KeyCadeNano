@@ -218,52 +218,49 @@ void SSD1306::updateAsync()
 
 void SSD1306::drawBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h)
 {
-	uint16_t byteIdx = 0;
-	uint16_t bitIdx = 7;
-	uint8_t  currByte;
+	uint16_t bytePos = 0;
+	int8_t bitPos = 7;
 
-	for(uint8_t bitmapY = y; bitmapY < y + h; ++bitmapY) {
-		currByte = bitmap[byteIdx];
+	uint8_t currByte = bitmap[bytePos++];
 
-		for(uint8_t bitmapX = x; bitmapX < x + w; ++bitmapX) {
-			uint8_t pixel = (currByte >> bitIdx) & 1;
+	for(int yPos = y; yPos < y + h; ++yPos) {
+		for(int xPos = x; xPos < x + w; ++xPos) {
+			uint8_t c = currByte & (1 << bitPos--);
+			this->drawPixel(xPos, yPos, c);
 
-			this->drawPixel(bitmapX, bitmapY, pixel);
-
-			if(bitIdx == 0) {
-				currByte = bitmap[++byteIdx];
-				bitIdx = 7;
-			} else {
-				--bitIdx;
+			if(bitPos < 0) {
+				currByte = bitmap[bytePos++];
+				bitPos = 7;
 			}
 		}
 	}
 }
 
 
-void SSD1306::xorBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h)
+bool SSD1306::xorBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h)
 {
-	uint16_t byteIdx = 0;
-	uint16_t bitIdx = 7;
+	bool ret = false;
 
-	for(uint8_t bitmapY = y; bitmapY < y + h; ++bitmapY) {
-		for(uint8_t bitmapX = x; bitmapX < x + w; ++bitmapX) {
-			uint8_t pixel = (bitmap[byteIdx] >> bitIdx) & 1;
+	uint16_t bytePos = 0;
+	int8_t bitPos = 7;
 
-			if(bitmapY < this->displayHeight) {
-				if(bitmapX < this->displayWidth) {
-					this->xorPixel(bitmapX, bitmapY, pixel);
-				}
-			}
+	uint8_t currByte = bitmap[bytePos++];
 
-			if(bitIdx == 0) {
-				++byteIdx;
-				bitIdx = 7;
-			} else {
-				--bitIdx;
+	for(int yPos = y; yPos < y + h; ++yPos) {
+		for(int xPos = x; xPos < x + w; ++xPos) {
+			uint8_t c = currByte & (1 << bitPos--);
+			bool col = this->xorPixel(xPos, yPos, c);
+
+			ret |= col;
+
+			if(bitPos < 0) {
+				currByte = bitmap[bytePos++];
+				bitPos = 7;
 			}
 		}
 	}
+
+	return ret;
 }
 
 

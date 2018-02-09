@@ -36,7 +36,7 @@
 			void updateAsync();
 
 			void drawBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h);
-			void xorBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h);
+			bool xorBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h);
 			void drawChar(uint8_t x, uint8_t y, const char ch, uint8_t color = 1);
 
 			void scrollLeft(uint8_t n, uint8_t from = 0, uint8_t to = SSD1306_MAX_WIDTH);

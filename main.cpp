@@ -6,6 +6,8 @@
 #include "NanoGameEngine.h"
 #include "GameEngineFactory.h"
 
+#include "SplashScreen.h"
+
 
 #define _MAX(a,b) ((a)<(b))?(b):(a)
 #define _MIN(a,b) !((b)<(a))?(a):(b);
@@ -256,6 +258,34 @@ void runGame(uint8_t gameIdx)
 	delete gameEngine;
 }
 
+void showSplashScreen() {
+	display.fillScreen(0);
+
+	display.drawBitmap(
+			0, 0,
+			(uint8_t*) (SplashScreen_bits),
+			SplashScreen_width, SplashScreen_height);
+	display.drawString(0, 56, " HardWorkingToys.com");
+	display.update();
+
+	for(uint8_t i = 0; i < 20; ++i) {
+		if(getRawCurrentKey() != NGE_NOKEY) {
+			// Wait until they have released the key
+			while(getRawCurrentKey() != NGE_NOKEY) {
+				// Nothing
+			}
+
+			// Pause so they can still admire the screen
+			wait(0.25);
+			break;
+		}
+		wait(0.1);
+	}
+
+//	display.fillScreen(0);
+//	display.update();
+}
+
 
 int main()
 {
@@ -263,9 +293,7 @@ int main()
 
 	display.setScreenFlipped(true);
 
-	display.fillScreen(0);
-	display.update();
-
+	showSplashScreen();
 	gameCount = getGameCount();
 
 	while(true) {

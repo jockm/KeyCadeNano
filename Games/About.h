@@ -75,7 +75,7 @@ const uint8_t About_bas[] = {
 		"4020 print 0,  0, \"For code, hardware\"\n"
 		"4030 print 0,  8, \"files, documentation\"\n"
 		"4040 print 0, 16, \"complete licenses\"\n"
-		"4050 print 0, 24, \"and attributions"\"\n"
+		"4050 print 0, 24, \"and attributions\"\n"
 		"4060 print 0, 32, \"\"\n"
 		"4060 print 0, 40, \"HardWorkingToys.com\"\n"
 		"4070 print 0, 48, \"\"\n"

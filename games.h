@@ -50,7 +50,6 @@
 const GameData games[] = {
 //		 Type        IPS   FPS	Flags    Name                     U  D  L  R  C  1  2   Instructions Start   Data                                   Size
 //       ___________ ____  ___  _______  ______________________ ______________________  ____________ ______  ______________________________________ _______________________
-		{GT_UBASIC,     0,   0, GF_NONE, "About",              "\x2\x8\x4\x6\xC\x1\x2", NULL,        0x0200, About_bas,                             sizeof(About_bas)},
 		{GT_CHIP8,    500,  25, GF_NONE, "Airplane",           "\x8\x8\x8\x8\x8\x8\x8", NULL,        0x0200, Airplane_ch8,                          sizeof(Airplane_ch8)},
 //		{GT_CHIP8,   1000,  25, GF_NONE, "Ant",                "\x1\x1\x3\xC\xA\xA\xA", NULL,        0x0200, Ant_ch8,                               sizeof(Ant_ch8)},
 		{GT_CHIP8,    500,  25, GF_NONE, "Astro Dodge",        "\x2\x8\x4\x6\x5\x5\x5", NULL,        0x0200, Astro_Dodge_Revival_Studios_2008_ch8,  sizeof(Astro_Dodge_Revival_Studios_2008_ch8)},
@@ -80,6 +79,7 @@ const GameData games[] = {
 		{GT_CHIP8,    500,  25, GF_NONE, "Wipe Off",           "\x2\x8\x4\x6\xc\x1\x2", NULL,        0x0200, Wipe_Off_Joseph_Weisbecker_ch8,        sizeof(Wipe_Off_Joseph_Weisbecker_ch8)},
 		{GT_CHIP8,    500,  25, GF_NONE, "Worm",               "\x2\x8\x4\x6\xc\x1\x2", NULL,        0x0200, Worm_V4_RB_Revival_Studios_2007_ch8,   sizeof(Worm_V4_RB_Revival_Studios_2007_ch8)},
 		{GT_CHIP8,    500,  25, GF_NONE, "X-Mirror",           "\x2\x8\x4\x6\xc\x1\x2", NULL,        0x0200, X_Mirror_ch8,                          sizeof(X_Mirror_ch8)},
+		{GT_UBASIC,     0,   0, GF_NONE, "About KeyCade Nano", "\x2\x8\x4\x6\xC\x1\x2", NULL,        0x0200, About_bas,                             sizeof(About_bas)},
 		{GT_EOL,        0,   0, GF_NONE,  NULL,                NULL,                    NULL,        0,      0}
 };
 

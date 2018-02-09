@@ -192,7 +192,7 @@
 			uint8_t   transferBuffer[sizeof(displayBuffer) + 1];
 			uint8_t   transferResponseBuffer[10];
 
-			volitile bool transferInProgress;
+			volatile bool transferInProgress;
 
 	};
 #endif

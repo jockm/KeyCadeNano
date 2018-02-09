@@ -128,6 +128,8 @@ void UBasicGameEngine::init(uint8_t *prog, uint16_t memSiz, uint16_t startAddr, 
 
 	ubasic_init(&this->ubInfo, (const char *)this->mem);
 
+	this->ubInfo.app_context = this;
+
 	this->ubInfo.peek_function = peekHandler;
 	this->ubInfo.poke_function = pokeHandler;
 
@@ -222,13 +224,13 @@ void UBasicGameEngine::userFuncString(const char *s)
 
 void UBasicGameEngine::userFuncEnd()
 {
-	if(strcmp("cls", (const char *)this->buf) == 0) {
+	if(strcmp("cls", (const char *)this->cmd) == 0) {
 		this->screen->fillScreen(this->x);
-	} else if(strcmp("update", (const char *)this->buf) == 0) {
+	} else if(strcmp("update", (const char *)this->cmd) == 0) {
 		this->screen->update();
-	} else if(strcmp("draw", (const char *)this->buf) == 0) {
+	} else if(strcmp("draw", (const char *)this->cmd) == 0) {
 		this->screen->drawBitmap(this->x, this->y, this->buf, this->w, this->h);
-	} else if(strcmp("xdraw", (const char *)this->buf) == 0) {
+	} else if(strcmp("xdraw", (const char *)this->cmd) == 0) {
 		this->screen->xorBitmap(this->x, this->y, this->buf, this->w, this->h);
 	}
 }

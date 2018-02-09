@@ -261,9 +261,11 @@ void UBasicGameEngine::printFuncNum(int16_t v) {
 
 	if(!this->seenX) {
 		this->x = v;
+		this->seenX = true;
 	} else if(!this->seenY) {
 		this->y = v;
 
+		this->seenY = true;
 		this->collectingBody = true;
 	}
 

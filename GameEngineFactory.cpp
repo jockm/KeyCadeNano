@@ -35,7 +35,7 @@ NanoGameEngine *GameEngineFactory::getEngine(GameType type)
 			break;
 
 		case GT_UBASIC:
-			ret = (NanoGameEngine *)new EmbedVMEngine();
+			ret = (NanoGameEngine *)new UBasicGameEngine();
 			break;
 
 		default:

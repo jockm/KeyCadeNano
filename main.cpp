@@ -281,9 +281,6 @@ void showSplashScreen() {
 		}
 		wait(0.1);
 	}
-
-//	display.fillScreen(0);
-//	display.update();
 }
 
 

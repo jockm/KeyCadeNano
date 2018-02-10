@@ -3,7 +3,25 @@ KeyCade Nano
 
 A Keychain size game console that plays SCHIP-8 Games, and more.
 
-There really needs to be more text here
+Software
+--------
+The KeyCade Nano supports programs written in:
+
+* [CHIP-8](https://en.wikipedia.org/wiki/CHIP-8) — A Virtual Machine for 
+  writing simple games. Originally created for the RCA COSMAC VIP computer. 
+  For information the [S]CHIP-8 Instruction set, and hints at its 
+  implementation, please check out 
+  [Cowgod's Chip-8 Technical Reference](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM)
+* [EmbedVM](http://www.clifford.at/embedvm/) — A more generic VM for embedded 
+  systems. Clifford Wolf created a emulator for an imaginary 16-bit CPU
+  and then a compiler for a [Small-C](https://en.wikipedia.org/wiki/Small-C) 
+  like language.
+* [uBASIC](https://github.com/jockm/ubasic).  I created a fork of Adam 
+  Dunkels' exceptionally simple BASIC interpreter.  It was added as an
+  amusement more than anything else, but it can be used to write real code.
+  The "About" page on the main menu is written in it (See `Games/About.h` 
+  for an example).
+
 
 Hardware
 --------

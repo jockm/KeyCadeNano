@@ -5,8 +5,17 @@ A Keychain size game console that plays SCHIP-8 Games, and more.
 
 There really needs to be more text here
 
-Copyright
----------
+
+
+Copyrights & License
+--------------------
+All of the CHIP-8 Games have come from one of the following public archives:
+
+* [Mir3z'w Javascript CHIP-8 Emulator](https://github.com/mir3z/chip8-emu)
+* [Dmatlack's CHIP-8 Emulator](https://github.com/dmatlack/chip8)
+* [SVision-8: CHIP-8 and SCHIP emulator](http://devernay.free.fr/hacks/chip8/)
+* [David Winter's CHIP-8 emulation page](http://pong-story.com/chip8/)
+* [Zophar's Domain](https://www.zophar.net/pdroms/chip8)
 
 Except where otherwise noted, all files in the project are covered by
 the MIT License as follows:

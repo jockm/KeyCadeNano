@@ -53,7 +53,7 @@ void Chip8::init(uint8_t *prog, uint16_t memSize, uint16_t startAddr, Screen *sc
 	srand(us_ticker_read());
 
 	this->screen = screen;
-	this->mem = mem;
+	this->mem = prog;
 	this->memSize = memSize;
 
 	memcpy(this->mem, chip8Font, sizeof(chip8Font));
@@ -89,7 +89,7 @@ inline bool Chip8::drawPixel(uint8_t x, uint8_t y, bool on)
 
 
 	if(x > this->screenWidth || y > this->screenHeight) {
-		return false;
+		return true;
 	}
 
 //	x %= this->screenWidth;
@@ -210,7 +210,7 @@ bool Chip8::runOne(uint8_t keyPressed)
 
 inline bool Chip8::runOtherOp(uint8_t op)
 {
-	bool ret = false;
+	bool ret = true;
 
 	if((op & 0xF0) == 0xC0) {
 		ret = this->doScrollDown(op & 0xF);
@@ -254,7 +254,7 @@ inline bool Chip8::runOtherOp(uint8_t op)
 
 inline bool Chip8::runMathOp(uint8_t x, uint8_t y, uint8_t opt)
 {
-	bool ret = false;
+	bool ret = true;
 
 	switch(opt) {
 		case 0x0:
@@ -300,7 +300,7 @@ inline bool Chip8::runMathOp(uint8_t x, uint8_t y, uint8_t opt)
 
 inline bool Chip8::runKeyOp(uint8_t op, uint8_t x)
 {
-	bool ret = false;
+	bool ret = true;
 
 	if(op == 0x9E) {
 		ret = this->doSkipKey(x);
@@ -314,7 +314,7 @@ inline bool Chip8::runKeyOp(uint8_t op, uint8_t x)
 
 inline bool Chip8::runOtherOtherOp(uint8_t x, uint8_t op)
 {
-	bool ret = false;
+	bool ret = true;
 
 	switch(op) {
 		case 0x07:
@@ -398,7 +398,9 @@ inline bool Chip8::doCls()
 inline bool Chip8::doRet()
 {
 	if(this->sp == 0) {
-		return false;
+		// Should this be false? i.e. should we siply ignore this error
+		// or exit so the user knows something is wrong?
+		return true;
 	}
 
 	this->pc = (this->stack[--sp]) & 0x0FFF;
@@ -819,7 +821,7 @@ inline bool Chip8::doSetIndexDigit(uint8_t x)
 inline bool Chip8::doSetIndexBigDigit(uint8_t x)
 {
 	this->vI = 80 + this->v[x] * 0xA;
-	return false;
+	return true;
 }
 
 

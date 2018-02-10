@@ -7,6 +7,17 @@ A uBASIC programs is simply a a plaintext file continaing the uBASIC source.  Pl
 ## Commands
 The language has been enhanced in the following ways for the KeyCade Nano:
 
+#### End
+
+Usage:
+> end
+
+Ends the program and returns to the main menu
+
+Parameters:
+*None*  
+
+
 #### Input
 
 Usage:

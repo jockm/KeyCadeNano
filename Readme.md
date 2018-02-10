@@ -5,6 +5,26 @@ A Keychain size game console that plays SCHIP-8 Games, and more.
 
 There really needs to be more text here
 
+Hardware
+--------
+The KeyCade Nano is (currently) built around the following hardware:
+
+* 0.96" 128x64 Pixel Monochrom OLED Display
+* A 5-Way Tactile Switch (aka "the joystick")
+* Two tactile buttons: [A] — the top, and [B] - the bottom.
+* A [STM32L432KC](http://www.st.com/en/microcontrollers/stm32l432kc.html) 
+Low Power ARM Cortex-M4 Mirocontroller:
+    * 64K SRAM
+    * 256K of Flash
+    * 80Mhz 
+	
+
+![Open Source Hardware Logo](https://i2.wp.com/www.oshwa.org/wp-content/uploads/2014/03/oshw-logo-100-px.png?resize=95%2C100)
+
+Just as the software for the KeyCade Nano is open source, the hardware is 
+also available under a [OSHW compatabile license](https://www.oshwa.org).  Please see the 
+[KeyCadeNano Hardware Repository](https://github.com/jockm/KeyCadeNanoHardware)
+for more information.
 
 Limitations & Future Plans
 --------------------------

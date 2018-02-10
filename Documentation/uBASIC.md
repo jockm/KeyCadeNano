@@ -3,7 +3,9 @@ uBASIC
 
 A uBASIC programs is simply a a plaintext file continaing the uBASIC source.  Please consult the [uBASIC](https://github.com/jockm/ubasic) site for documentation (such as it is) on the language.
 
-However the language has been enhanced in the following ways for the KeyCade Nano:
+
+## Commands
+The language has been enhanced in the following ways for the KeyCade Nano:
 
 #### Input
 
@@ -85,3 +87,8 @@ Parameters:
   bytes.  However both data types may be freely intermindled.
   be printed to the screen
   
+## Peeks & Pokes
+The `peek` and `poke` commands can be used to get and set the following:
+
+* Address 0 — The system delay value in 60ths of a second (0..255)
+* Address 1 — The sound delay value in 60ths of a second (0..255)

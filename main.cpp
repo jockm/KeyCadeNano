@@ -219,7 +219,7 @@ void runGame(uint8_t gameIdx)
 	uint32_t nextFrameTime = 0;
 	uint32_t nextDecrementTime = 0;
 
-	bool freeRunning = currGame->framesPerSecond == 0 || currGame->instructionsPerSecond;
+	bool freeRunning = currGame->framesPerSecond == 0 || currGame->instructionsPerSecond == 0;
 
 	const int microsconstPerFrame = 1000000 / currGame->framesPerSecond;
 	const int instructionsPerFrame = freeRunning ? 1 : currGame->instructionsPerSecond / currGame->framesPerSecond;
@@ -245,6 +245,9 @@ void runGame(uint8_t gameIdx)
 				}
 
 				done = !gameEngine->runOne(key);
+				if(done) {
+					break;
+				}
 			}
 
 			if(!freeRunning) {

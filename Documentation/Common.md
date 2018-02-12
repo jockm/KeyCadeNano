@@ -65,13 +65,18 @@ The KeyCade Nano doesn't have a fixed mapping for they keyboard, instead a mappi
 Care should be used mapping the `[C]` key as it *can* be easy to press when pressing the joystick in one of the ordinal directions.
 
 
+#### Keymapping
+TODO: Write this
+
 #### GameData Data Structure
 
+Every game must be represented by a `GameData` structure, either in the
+ `games.h` array, or in the Cartridge Header (see
 ```C++
 typedef struct {
 	GameType       type;
 	uint16_t       instructionsPerSecond;
-	uint16_t       framesPerSecond;
+	uint8_t        framesPerSecond;
 	uint16_t       flags;
 	const char    *name;
 	const char    *keyMap;
@@ -80,3 +85,20 @@ typedef struct {
 	const uint8_t *data;
 	uint16_t       size;
 } GameData;
+```
+
+| Field                 | Definition                                                          |
+| --------------------- | ------------------------------------------------------------------- |
+| type                  | What `GameEngine` should be used
+| instructionsPerSecond | How many instructions per second should be executed (see: Execution Throttling)
+| framesPerSecond       | How many times per second should the display be uptated (see: Display Updating)
+| flags                 | Flags to pass into the game engine. Currently none defined
+| name                  | The name of the program (no more than 20 characters)
+| keyMap                | The map of button presses to what is passed to the game engine (see Key Mapping)
+| instuctions           | Optional. Not implemented. A page of text to be displayed before the game starts.  No more than 168 characters
+| codeStart             | The byte offet into the program where execution begins.  For CHIP-8 this is normally `0x200`; for EmbedVM this will vary based on the location of the `main` function; and for uBASIC it will be `0x0` 
+| data                  | Pointer to memory (or location in the cartridge) of the program.
+| size                  | The size (in bytes) of the program.  Currently this can be no more than 4K (4096 bytes)
+
+ 
+

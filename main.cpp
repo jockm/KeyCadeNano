@@ -219,6 +219,29 @@ uint8_t pickGame(void)
 }
 
 
+bool runOneInstruction(uint32_t nextDecrementTime)
+{
+	bool ret = true;
+	if(us_ticker_read() >= nextDecrementTime) {
+		gameEngine->intervalCallback();
+		nextDecrementTime = us_ticker_read() + 16666;
+	}
+	uint8_t key = getCurrentGameKey();
+
+	if(key == NGE_EXIT) {
+		// TODO Should there be a confirmation screen?
+		ret = false;
+
+		wait(0.5);
+	}
+
+	if(ret) {
+		ret = !gameEngine->runOne(key);
+	}
+
+	return ret;
+}
+
 void runGame(uint8_t gameIdx)
 {
 	bool done = false;
@@ -236,39 +259,30 @@ void runGame(uint8_t gameIdx)
 
 	uint32_t nextFrameTime = 0;
 	uint32_t nextDecrementTime = 0;
+	uint32_t microsconstPerFrame = 0;
+	uint32_t instructionsPerFrame = 0;
 
-	bool freeRunning = currGame->framesPerSecond == 0 || currGame->instructionsPerSecond == 0;
+	if(currGame->framesPerSecond > 0) {
+		microsconstPerFrame = 1000000 / currGame->framesPerSecond;
+	}
 
-	const int microsconstPerFrame = 1000000 / currGame->framesPerSecond;
-	const int instructionsPerFrame = freeRunning ? 1 : currGame->instructionsPerSecond / currGame->framesPerSecond;
-
+	if(currGame->instructionsPerSecond > 0) {
+		instructionsPerFrame =  currGame->instructionsPerSecond / currGame->framesPerSecond;
+	}
 
 	while(!done) {
 		uint32_t currTime = us_ticker_read();
 
+		if(instructionsPerFrame == 0) {
+
+		}
+
 		if(currTime >= nextFrameTime) {
 			for(uint16_t i = 0; i < instructionsPerFrame; ++i) {
-				if(us_ticker_read() >= nextDecrementTime) {
-					gameEngine->intervalCallback();
-					nextDecrementTime = us_ticker_read() + 16666;
-				}
-				uint8_t key = getCurrentGameKey();
-
-				if(key == NGE_EXIT) {
-					// TODO Should there be a confirmation screen?
-					done = true;
-
-					wait(0.5);
-					break;
-				}
-
-				done = !gameEngine->runOne(key);
-				if(done) {
-					break;
-				}
+				done = runOneInstruction(nextDecrementTime);
 			}
 
-			if(!freeRunning) {
+			if(microsconstPerFrame) {
 				display.updateAsync();
 				nextFrameTime = currTime + microsconstPerFrame;
 			}

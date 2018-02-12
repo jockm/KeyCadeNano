@@ -37,7 +37,7 @@
 	typedef struct {
 		GameType       type;
 		uint16_t       instructionsPerSecond;
-		uint16_t       framesPerSecond;
+		uint8_t        framesPerSecond;
 		uint16_t       flags;
 		const char    *name;
 		const char    *keyMap;

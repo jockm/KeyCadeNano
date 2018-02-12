@@ -60,13 +60,32 @@ No more than one keypress can be registered at a time, and the keys have the fol
 
 This means that if the user is pressing `[U]` and `[L]` then the key `[U]` will be returned.  Likewise if `[A]` and `[B]` are pressed at the same time then `[A]` will be returned.
 
-The KeyCade Nano doesn't have a fixed mapping for they keyboard, instead a mapping is estabilished in the program's associated GameData structure.  Each key will return a single 0..255 value for each of the seven keys.
+The KeyCade Nano doesn't have a fixed mapping for they keyboard, instead a mapping is estabilished `GameData` structure. 
 
 Care should be used mapping the `[C]` key as it *can* be easy to press when pressing the joystick in one of the ordinal directions.
 
 
-#### Keymapping
-TODO: Write this
+#### Key Mapping
+
+The KeyCade Nano doesn't have a fixed mapping for they keyboard, instead 
+a mapping is estabilished in the `keyMap` field of the program's associated 
+`GameData` structure.  
+
+They key map is is a seven character array (no more, no less) that  defines
+they 0..255 value for each of the seven "keys" on the KeyCade Nano's 
+controller.
+
+They keymap is defined in the following order:
+1. Up
+2. Down
+3. Left
+4. Right
+5. Center
+6. A
+7. B
+
+If your program does not use to the full keymap you **must** put in dummy
+values for the keys you don't care about.
 
 #### GameData Data Structure
 

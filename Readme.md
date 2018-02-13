@@ -25,6 +25,8 @@ The KeyCade Nano supports programs written in:
   amusement more than anything else, but it can be used to write real code.
   The "About" page on the main menu is written in it (See `Games/About.h` 
   for an example).
+  
+You can learn more about the software stack, and how to write your own programs, in the [Documentation](Documentation/Readme.md) 
 
 
 Hardware

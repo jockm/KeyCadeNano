@@ -3,6 +3,10 @@ KeyCade Nano
 
 A Keychain size game console that plays SCHIP-8 Games, and more.
 
+Building
+--------
+You can find instructions on building this project [here](Documentation/Building.md).
+
 Software
 --------
 The KeyCade Nano supports programs written in:

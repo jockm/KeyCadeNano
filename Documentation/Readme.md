@@ -14,7 +14,23 @@ Instead the KeyCade Nano supports a handful of interpreters and virtual machines
 
 Once you have picked the endine you want to use, you need to understand the [concepts common](Common..md) to all engines; and what [Useful tools](UsefulTools.md) to help you,
 
-Once you have written your program you will need to put it on a [Cartridge](Cartridge.md].
+Once you have written your program you will need to put it on a [Cartridge](Cartridge.md).
 
 [A quick tutorial on writing your own programs](WritingYourProgram.md)
 
+Limitations & Future Plans
+--------------------------
+Not all [S]CHIP-8 programs are known to work.  Some require the full 16-key 
+keyboard, and as such will never be able to work on the hardware as it 
+currently is.  Others fail for as yet undetermined reasons, such as the game
+_Ant_.  
+
+Currently all game engines are limited to 4K of executable code.  While this
+is (more than) enough for many types games, but people will always want more.
+While the hardware currently 64K of SRAM, future editions — should they ever
+exist — are likely to support much less. So we are sticking with this number 
+for now.  You are free to expand this as you see fit.
+
+There is no persistant storage, no way of saving games, high scores, or the 
+like.  In the future a portion of cartridge space may be put aside for app
+based storage.

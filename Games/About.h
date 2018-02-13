@@ -57,7 +57,7 @@ const uint8_t About_bas[] = {
 //		"rem -------------------------------\n"
 		"3000 user \"cls\", 0\n"
 		"3020 print 0,  0, \"Used with permission\"\n"
-		"3030 print 0,  8, \"UBasic:\"\n"
+		"3030 print 0,  8, \"uBASIC:\"\n"
 		"3040 print 0, 16, \"    Adam Dunkels\"\n"
 		"3050 print 0, 24, \"    BSD 3-Clause like\"\n"
 		"3060 print 0, 32, \"EmbedVM:\"\n"

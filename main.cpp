@@ -59,8 +59,6 @@ DigitalIn action2(PA_8, PullUp);
 
 //PwmOut    speaker(PA_1);
 //AnalogOut    speakerDac(PA_4);
-PwmOut    speaker(PA_1);
-AnalogOut    speakerDac(PA_4);
 
 
 uint8_t   gameCount;
@@ -93,6 +91,9 @@ uint8_t getGameCount(void)
 uint8_t getRawCurrentKey(void)
 {
 	char ret = NGE_NOKEY;
+	bool c = !center;
+	bool a = !action1;
+	bool b = !action2;
 
 	if(!center && !action1 && !action2) {
 		ret = NGE_EXIT;
@@ -221,7 +222,7 @@ uint8_t pickGame(void)
 
 bool runOneInstruction(uint32_t nextDecrementTime)
 {
-	bool ret = true;
+	bool ret = false;
 	if(us_ticker_read() >= nextDecrementTime) {
 		gameEngine->intervalCallback();
 		nextDecrementTime = us_ticker_read() + 16666;
@@ -230,12 +231,12 @@ bool runOneInstruction(uint32_t nextDecrementTime)
 
 	if(key == NGE_EXIT) {
 		// TODO Should there be a confirmation screen?
-		ret = false;
+		ret = true;
 
 		wait(0.5);
 	}
 
-	if(ret) {
+	if(!ret) {
 		ret = !gameEngine->runOne(key);
 	}
 
@@ -280,10 +281,17 @@ void runGame(uint8_t gameIdx)
 		if(currTime >= nextFrameTime) {
 			for(uint16_t i = 0; i < instructionsPerFrame; ++i) {
 				done = runOneInstruction(nextDecrementTime);
+				if(done) {
+					break;
+				}
 			}
 
 			if(microsconstPerFrame) {
+#if 1
+				display.update();
+#else
 				display.updateAsync();
+#endif
 				nextFrameTime = currTime + microsconstPerFrame;
 			}
 		}

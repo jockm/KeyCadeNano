@@ -63,33 +63,33 @@ class EmbedVMEngine: public NanoGameEngine {
 
 		int16_t userFunction(uint8_t funcid, uint8_t argc, int16_t *argv);
 
-		int16_t ufGetDelay(uint8_t argc, int16_t *argv)
+		int16_t ufGetValue(uint8_t argc, int16_t *argv)
 		{
-			uint16_t ret = this->delayCounter;
+			uint16_t ret = 0;
+			uint16_t type = argv[0];
+
+			if(type == 0) {
+				ret = this->delayCounter;
+			} else if(type == 1) {
+				ret = this->soundCounter;
+			} else if(type == 2) {
+				ret = rand() % 1000;
+			}
 
 			return ret;
 		}
 
 
-		int16_t ufSetDelay(uint8_t argc, int16_t *argv)
+		int16_t ufSetValue(uint8_t argc, int16_t *argv)
 		{
-			this->delayCounter = argv[0];
+			uint16_t type = argv[0];
+			uint16_t value = argv[1];
 
-			return 0;
-		}
-
-
-		int16_t ufGetSoundDelay(uint8_t argc, int16_t *argv)
-		{
-			uint16_t ret = this->soundCounter;
-
-			return ret;
-		}
-
-
-		int16_t ufSetSoundDelay(uint8_t argc, int16_t *argv)
-		{
-			this->soundCounter = argv[0];
+			if(type == 0) {
+				this->delayCounter = value;
+			} else if(type == 1) {
+				this->soundCounter = value;
+			}
 
 			return 0;
 		}

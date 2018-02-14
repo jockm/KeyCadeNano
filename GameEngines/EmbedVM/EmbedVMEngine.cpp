@@ -101,30 +101,22 @@ int16_t EmbedVMEngine::userFunction(uint8_t funcid, uint8_t argc, int16_t *argv)
 			break;
 
 		case 3:
-			ret = this->ufUpdateScreen(argc, argv);
+			if(argc == 0 || argv[1] == 0) {
+				ret = this->ufUpdateScreen(argc, argv);
+			} else {
+				ret = this->ufClearScreen(argc, argv);
+			}
 			break;
 
 		case 4:
-			ret = this->ufClearScreen(argc, argv);
+			ret = this->ufGetValue(argc, argv);
 			break;
 
 		case 5:
-			ret = this->ufGetDelay(argc, argv);
+			ret = this->ufSetValue(argc, argv);
 			break;
 
 		case 6:
-			ret = this->ufSetDelay(argc, argv);
-			break;
-
-		case 7:
-			ret = this->ufGetSoundDelay(argc, argv);
-			break;
-
-		case 8:
-			ret = this->ufSetSoundDelay(argc, argv);
-			break;
-
-		case 9:
 			ret = this->ufGetKey(argc, argv);
 			break;
 

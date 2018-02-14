@@ -8,8 +8,9 @@ consult the [EmbedVM](http://www.clifford.at/embedvm/) page for more information
 
 
 ## Commands
-The EmbedVM system may be extended by adding up to to 16 User Funtions.  
-These are named $uf0 trough $uff.   
+The EmbedVM system may be extended by adding up to to 9 User Funtions.  
+These are named $uf0 trough $uf8. The following have been implmented in
+the KeyCade Nano  
 
 #### $uf0 — Exit
 
@@ -66,85 +67,54 @@ Returns:
 #### $uf3 — Update Screen
 
 Usage:
-> $uf3()
+> $uf3([*{cmd}*])
 
 Updates the screen
 
 Parameters:
-*None*  
+* {cmd} — optional.  If `0` then update screen.  If `1` then clear the 
+  screen (fill it with black).  Default `0`
 
 Returns:
 >Nothing
 
-#### $uf4 — Clear Screen
+#### $uf4 — Get Value
 
 Usage:
-> $uf4()
+> $uf4(*{type}*)
 
-Clears the screen (fills it with black)
+Gets the a system value
 
 Parameters:
-*None*  
+* {type} — one of the following:
+    * `0` the system delay value in 60ths of a second
+    * `1` the sound delay value in 60ths of a second
+    * `3` a random number between 0 and 999
+    
+
+Returns:
+> The requested value 
+
+#### $uf5 — Set Value
+
+Usage:
+> $uf5(*{type}*, *{value}*)
+
+Sets a system value
+
+Parameters:
+* {type} — one of the following:
+    * `0` the system delay value in 60ths of a second
+    * `1` the sound delay value in 60ths of a second
+* {type} — one of the   	 following:
 
 Returns:
 >Nothing
 
-#### $uf5 — Get System Delay
+#### $uf6 — Get Key
 
 Usage:
-> $uf5()
-
-Gets the System Delay value
-
-Parameters:
-*None*  
-
-Returns:
-> the System Delay value in 60ths of a second
-
-#### $uf6 — Set System Delay
-
-Usage:
-> $uf6(*{delay}*)
-
-Sets the System Delay value
-
-Parameters:
-* {delay} — the new delay value in 60ths of a second
-
-Returns:
->Nothing
-
-#### $uf7 — Get Sound Delay
-
-Usage:
-> $uf7()
-
-Gets the Sound Delay value
-
-Parameters:
-*None*
-
-Returns:
-> the Sound Delay value in 60ths of a second
-
-#### $uf8 — Set Sound Delay
-
-Usage:
-> $uf8(*{delay}*)
-
-Sets the Sound Delay value
-
-Parameters:
-* {delay} — the new delay value in 60ths of a second
-
-Returns:
->Nothing
-
-#### $uf9 — Get Key
-
-Usage:
-> $uf9()
+> $uf6()
 
 Ends the program and returns to the main menu
 

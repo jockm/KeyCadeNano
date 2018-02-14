@@ -247,6 +247,8 @@ void runGame(uint8_t gameIdx)
 {
 	bool done = false;
 
+	srand(us_ticker_read());
+
 	display.fillScreen(0);
 	display.update();
 

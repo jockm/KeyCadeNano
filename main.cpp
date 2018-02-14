@@ -275,7 +275,7 @@ void runGame(uint8_t gameIdx)
 		uint32_t currTime = us_ticker_read();
 
 		if(instructionsPerFrame == 0) {
-
+			done = runOneInstruction(nextDecrementTime);
 		}
 
 		if(currTime >= nextFrameTime) {

@@ -125,8 +125,15 @@ void pokeHandler(VARIABLE_TYPE arg, VARIABLE_TYPE value, void *context)
 VARIABLE_TYPE inputHandler(VARIABLE_TYPE arg, void *context)
 {
 	UBasicGameEngine *me = (UBasicGameEngine *)context;
+	VARIABLE_TYPE ret = 0;
 
-	VARIABLE_TYPE ret = me->getCurrentKey();
+	if(arg == 1) {
+		// Get A random number
+		ret = rand() % 100;
+	} else {
+		// Default: get the current key
+		ret = me->getCurrentKey();
+	}
 	return ret;
 }
 

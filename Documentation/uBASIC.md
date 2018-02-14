@@ -26,7 +26,7 @@ Usage:
 Gets the current key pressed, -1 if no key has been pressed
 
 Parameters:
-* {mode} — currently ignored, use `0`
+* {mode} — `0` for the current key pressed, `1` for a random number between 0..99
 * {var} — the variable that recieves the current key 
 
 #### Print

@@ -22,19 +22,43 @@
 #	define CARTRIDGE_H_
 
 #	include "mbed.h"
+#	include "GameData.h"
+#	include "I2CEEProm.h"
 
 
 	class Cartridge {
 		public:
-			Cartridge(I2C *i2c);
-			virtual ~Cartridge();
+			Cartridge(I2CEEProm *ee)
+			{
+				this->eeprom = ee;
+				this->mem = NULL;
+				this->size = 0;
+			}
 
-			bool load();
+
+			virtual ~Cartridge()
+			{
+				// Nothing
+			}
+
+			void setMem(uint8_t *m, uint16_t siz)
+			{
+				this->mem = m;
+				this->size = siz;
+			}
+
+			uint16_t getVersion() const {
+				return version;
+			}
+
+
+			bool isCartridgePresent();
 
 		private:
-			I2C *i2c;
-			uint16_t size;
-			uint8_t data[4096];
+			I2CEEProm *eeprom;
+			uint8_t   *mem;
+			uint16_t   size;
+			uint16_t   version;
 	};
 
 #endif /* CARTRIDGE_H_ */

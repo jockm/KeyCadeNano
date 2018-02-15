@@ -19,6 +19,9 @@
 // THE SOFTWARE.
 
 #include "SSD1306.h"
+#include "I2CEEProm.h"
+#include "Cartridge.h"
+
 #include "GameData.h"
 #include "games.h"
 #include "NanoGameEngine.h"
@@ -48,6 +51,8 @@ enum {
 //DigitalOut LED(LED1);
 I2C        i2c(PA_10, PA_9);
 SSD1306    display(&i2c, 0x78);
+I2CEEProm  eeprom(&i2c, 0xA0);
+Cartridge cartridge(&eeprom);
 
 DigitalIn up(PA_6, PullUp);
 DigitalIn down(PB_0, PullUp);
@@ -60,10 +65,13 @@ DigitalIn action2(PA_8, PullUp);
 //PwmOut    speaker(PA_1);
 //AnalogOut    speakerDac(PA_4);
 
+PwmOut    speaker(PA_1);
+AnalogOut speakerDac(PA_4);
+
 
 uint8_t   gameCount;
 
-uint8_t   mem[4096];
+uint8_t         mem[4096];
 NanoGameEngine *gameEngine;
 const GameData *currGame;
 

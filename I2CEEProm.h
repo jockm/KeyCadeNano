@@ -12,15 +12,20 @@
 
 	class I2CEEProm {
 		public:
-			I2CEEProm(I2C *i2cPort, uint8_t addr)
+			I2CEEProm(I2C *i2cPort, uint8_t addr = 0x50)
 			{
 				this->i2c = i2cPort;
 				this->i2cAddr = addr;
 			}
 
-			virtual ~I2CEEProm();
+			virtual ~I2CEEProm() {
+				// Nothing
+			}
 
-			uint8_t readByte(uint16_t addr);
+			int16_t writeByte(uint16_t addr, uint8_t val);
+
+
+			int16_t readByte(uint16_t addr);
 			uint16_t read(uint16_t addr, uint8_t *buf, uint16_t size);
 		private:
 			I2C     *i2c;

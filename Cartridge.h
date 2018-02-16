@@ -28,37 +28,15 @@
 
 	class Cartridge {
 		public:
-			Cartridge(I2CEEProm *ee)
-			{
-				this->eeprom = ee;
-				this->mem = NULL;
-				this->size = 0;
-			}
-
-
 			virtual ~Cartridge()
 			{
 				// Nothing
 			}
 
-			void setMem(uint8_t *m, uint16_t siz)
-			{
-				this->mem = m;
-				this->size = siz;
-			}
-
-			uint16_t getVersion() const {
-				return version;
-			}
-
-
-			bool isCartridgePresent();
-
-		private:
-			I2CEEProm *eeprom;
-			uint8_t   *mem;
-			uint16_t   size;
-			uint16_t   version;
+			virtual uint16_t getVersion() const = 0;
+			virtual bool isCartridgePresent() = 0;
+			virtual uint8_t getGameCount() = 0;
+			virtual const GameData *getGameAt(uint8_t pos) = 0;
 	};
 
 #endif /* CARTRIDGE_H_ */

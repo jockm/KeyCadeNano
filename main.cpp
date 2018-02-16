@@ -20,10 +20,11 @@
 
 #include "SSD1306.h"
 #include "I2CEEProm.h"
-#include "Cartridge.h"
+#include "EEPromCartridge.h"
+#include "InternalCartridge.h"
+
 
 #include "GameData.h"
-#include "games.h"
 #include "NanoGameEngine.h"
 #include "GameEngineFactory.h"
 
@@ -52,7 +53,10 @@ enum {
 I2C        i2c(PA_10, PA_9);
 SSD1306    display(&i2c, 0x78);
 I2CEEProm  eeprom(&i2c, 0xA0);
-Cartridge cartridge(&eeprom);
+
+Cartridge         *cartridge;
+EEPromCartridge    externalCartridge(&eeprom);
+InternalCartridge  internalCartridge;
 
 DigitalIn up(PA_6, PullUp);
 DigitalIn down(PB_0, PullUp);
@@ -65,15 +69,17 @@ DigitalIn action2(PA_8, PullUp);
 //PwmOut    speaker(PA_1);
 //AnalogOut    speakerDac(PA_4);
 
-PwmOut    speaker(PA_1);
-AnalogOut speakerDac(PA_4);
+//PwmOut    speaker(PA_1);
+//AnalogOut speakerDac(PA_4);
 
 
 uint8_t   gameCount;
 
 uint8_t         mem[4096];
 NanoGameEngine *gameEngine;
-const GameData *currGame;
+GameData        currGame;
+uint8_t         currGameName[21];
+uint8_t         currGameKeymap[8];
 
 Ticker intervalTicker;
 
@@ -81,27 +87,31 @@ uint8_t lastKey;
 uint8_t lastMenuKey;
 
 
-uint8_t getGameCount(void)
+
+GameData *getCurrGame(uint8_t idx)
 {
-	if(games[0].type == GT_EOL) {
-		return 0;
-	}
+	const GameData *gd = cartridge->getGameAt(idx);
 
-	uint8_t ret = 0;
+	memcpy(currGameName, gd->name, strlen(gd->name));
+	memcpy(currGameKeymap, gd->keyMap, 7);
 
-	while(games[ret].type != GT_EOL) {
-		++ret;
-	}
+	currGame.type                  = gd->type;
+	currGame.instructionsPerSecond = gd->instructionsPerSecond;
+	currGame.framesPerSecond       = gd->framesPerSecond;
+	currGame.flags                 = gd->flags;
+	currGame.name                  = (const char *)currGameName;
+	currGame.keyMap                = (const char *)currGameKeymap;
+	currGame.codeStart             = gd->codeStart;
+	currGame.data                  = gd->data;
+	currGame.size                  = gd->size;
 
-	return ret;
+	return &currGame;
 }
+
 
 uint8_t getRawCurrentKey(void)
 {
 	char ret = NGE_NOKEY;
-	bool c = !center;
-	bool a = !action1;
-	bool b = !action2;
 
 	if(!center && !action1 && !action2) {
 		ret = NGE_EXIT;
@@ -134,7 +144,7 @@ uint8_t getCurrentGameKey(void)
 	}
 
 	if(key != NGE_NOKEY) {
-		ret = currGame->keyMap[key];
+		ret = currGame.keyMap[key];
 	}
 
 	return ret;
@@ -193,10 +203,12 @@ uint8_t pickGame(void)
 			display.drawString(25, 0, "Select A Game");
 
 			for(uint8_t i = pageTop; i < pageEnd; ++i) {
+				const GameData *gd = cartridge->getGameAt(i);
+
 				if(i == currIdx) {
 					display.drawChar(0, yPos, '>');
 				}
-				display.drawString(6, yPos, games[i].name);
+				display.drawString(6, yPos, gd->name);
 				yPos += 8;
 			}
 			display.update();
@@ -262,23 +274,25 @@ void runGame(uint8_t gameIdx)
 
 	lastKey = NGE_NOKEY;
 
-	currGame = &games[gameIdx];
+	const GameData *theGame = getCurrGame(gameIdx);
 
-	gameEngine = GameEngineFactory::getEngine(currGame->type);
-	gameEngine->loadMemory(mem, currGame->data, currGame->size);
-	gameEngine->init(mem, sizeof(mem), currGame->codeStart, &display);
+
+
+	gameEngine = GameEngineFactory::getEngine(theGame->type);
+	gameEngine->loadMemory(mem, theGame->data, theGame->size);
+	gameEngine->init(mem, sizeof(mem), theGame->codeStart, &display);
 
 	uint32_t nextFrameTime = 0;
 	uint32_t nextDecrementTime = 0;
 	uint32_t microsconstPerFrame = 0;
 	uint32_t instructionsPerFrame = 0;
 
-	if(currGame->framesPerSecond > 0) {
-		microsconstPerFrame = 1000000 / currGame->framesPerSecond;
+	if(theGame->framesPerSecond > 0) {
+		microsconstPerFrame = 1000000 / theGame->framesPerSecond;
 	}
 
-	if(currGame->instructionsPerSecond > 0) {
-		instructionsPerFrame =  currGame->instructionsPerSecond / currGame->framesPerSecond;
+	if(theGame->instructionsPerSecond > 0) {
+		instructionsPerFrame =  theGame->instructionsPerSecond / theGame->framesPerSecond;
 	}
 
 	while(!done) {
@@ -343,8 +357,10 @@ int main()
 
 	display.setScreenFlipped(true);
 
+	cartridge = (Cartridge *)&internalCartridge;
+	gameCount = cartridge->getGameCount();
+
 	showSplashScreen();
-	gameCount = getGameCount();
 
 	while(true) {
 		uint8_t currGameIdx = pickGame();

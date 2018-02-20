@@ -193,6 +193,8 @@ uint8_t pickGame(void)
 
 	bool updateMenu = true;
 
+	cartridge->loadGameData(mem, sizeof(mem));
+
 	while(!done) {
 		if(updateMenu) {
 			updateMenu = false;
@@ -276,10 +278,9 @@ void runGame(uint8_t gameIdx)
 
 	const GameData *theGame = getCurrGame(gameIdx);
 
-
-
 	gameEngine = GameEngineFactory::getEngine(theGame->type);
-	gameEngine->loadMemory(mem, theGame->data, theGame->size);
+
+	cartridge->loadGame(gameIdx, mem, gameEngine->getLoadOffset(), sizeof(mem));
 	gameEngine->init(mem, sizeof(mem), theGame->codeStart, &display);
 
 	uint32_t nextFrameTime = 0;
@@ -357,7 +358,12 @@ int main()
 
 	display.setScreenFlipped(true);
 
-	cartridge = (Cartridge *)&internalCartridge;
+	if(externalCartridge.isCartridgePresent()) {
+		cartridge = (Cartridge *)&externalCartridge;
+	} else {
+		cartridge = (Cartridge *)&internalCartridge;
+	}
+
 	gameCount = cartridge->getGameCount();
 
 	showSplashScreen();

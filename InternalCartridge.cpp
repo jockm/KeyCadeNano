@@ -30,3 +30,11 @@ const GameData *InternalCartridge::getGameAt(uint8_t pos)
 
 	return ret;
 }
+
+
+void InternalCartridge::loadGame(uint8_t gameIdx, uint8_t *mem, uint16_t loadOffset, uint16_t memSize)
+{
+	const GameData *gd = &games[gameIdx];
+	memset(mem, 0, memSize);
+	memcpy(mem + loadOffset, gd->data, gd->size);
+}

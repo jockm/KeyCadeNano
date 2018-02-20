@@ -37,6 +37,8 @@
 			virtual bool isCartridgePresent() = 0;
 			virtual uint8_t getGameCount() = 0;
 			virtual const GameData *getGameAt(uint8_t pos) = 0;
+			virtual void loadGameData(uint8_t *memoryPool, uint16_t memSize) = 0;
+			virtual void loadGame(uint8_t gameIdx, uint8_t *mem, uint16_t loadOffset, uint16_t memSize) = 0;
 	};
 
 #endif /* CARTRIDGE_H_ */

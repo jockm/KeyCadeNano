@@ -49,6 +49,7 @@ uint16_t I2CEEProm::read(uint16_t addr, uint8_t *buf, uint16_t size)
 	uint16_t ret = 0;
 	uint8_t  aBuf[2];
 	int      stat = 0;
+	uint8_t *bufAddr = buf;
 
 	aBuf[0] = addr >> 8;
 	aBuf[1] = addr & 0xFF;
@@ -61,16 +62,17 @@ uint16_t I2CEEProm::read(uint16_t addr, uint8_t *buf, uint16_t size)
 	int16_t lastChunkSize = size % chunkSize;
 
 	for(uint16_t i = 0; i < chunkCount; ++i) {
-		stat = this->i2c->read(this->i2cAddr, (char *) buf, chunkSize);
+		stat = this->i2c->read(this->i2cAddr, (char *) bufAddr, chunkSize);
 		if(stat) {
 			break;
 		}
 
 		ret += chunkSize;
+		bufAddr += chunkSize;
 	}
 
-	if(!stat) {
-		stat = this->i2c->read(this->i2cAddr, (char *) buf, lastChunkSize);
+	if(!stat && lastChunkSize > 0) {
+		stat = this->i2c->read(this->i2cAddr, (char *) bufAddr, lastChunkSize);
 		if(!stat) {
 			ret += chunkSize;
 		}

@@ -32,8 +32,9 @@
 		public:
 			virtual ~NanoGameEngine() {};
 
-			virtual void loadMemory(uint8_t *mem, const uint8_t *prog, uint16_t progSize) {
-				memcpy(mem, prog, progSize);
+			virtual uint16_t getLoadOffset()
+			{
+				return 0;
 			}
 
 			virtual void init(uint8_t *prog, uint16_t memSize, uint16_t startAddr, Screen *screen) = 0;

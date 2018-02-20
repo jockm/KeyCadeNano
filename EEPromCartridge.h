@@ -18,6 +18,8 @@ public:
 		this->mem = NULL;
 		this->size = 0;
 		this->version = 0;
+		this->iVersion = 0;
+		this->gameCount = 0;
 	}
 
 
@@ -39,9 +41,14 @@ public:
 
 	virtual bool isCartridgePresent();
 
-	virtual uint8_t getGameCount();
-	virtual const GameData *getGameAt(uint8_t pos);
+	virtual uint8_t getGameCount()
+	{
+		return this->gameCount;
+	}
 
+	virtual const GameData *getGameAt(uint8_t pos);
+	virtual void loadGameData(uint8_t *memoryPool, uint16_t memSize);
+	virtual void loadGame(uint8_t gameIdx, uint8_t *mem, uint16_t loadOffset, uint16_t memSize);
 
 
 private:
@@ -49,6 +56,8 @@ private:
 	uint8_t   *mem;
 	uint16_t   size;
 	uint16_t   version;
+	uint16_t   iVersion;
+	uint8_t    gameCount;
 
 };
 

@@ -23,16 +23,26 @@ public:
 	}
 
 
-	virtual uint16_t getVersion() const {
+	virtual uint16_t getVersion() const
+	{
 		return 100;
 	}
 
-	virtual bool isCartridgePresent() {
+	virtual bool isCartridgePresent()
+	{
 		return true;
 	}
 
+	virtual void loadGameData(uint8_t *memoryPool, uint16_t memSize)
+	{
+		// Nothing
+	}
+
+
 	virtual uint8_t getGameCount();
 	virtual const GameData *getGameAt(uint8_t pos);
+	virtual void loadGame(uint8_t gameIdx, uint8_t *mem, uint16_t loadOffset, uint16_t memSize);
+
 
 };
 
